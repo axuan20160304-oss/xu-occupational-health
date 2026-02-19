@@ -14,35 +14,7 @@
       "source": "NotebookLM"
     },
     {
-      "id": "post-900225",
-      "title": "职业性噪声聋听力损失分级示意图",
-      "description": "根据GBZ 49-2014标准，展示噪声聋听力损失的分级标准与对应纯音测听结果。",
-      "filename": "post-830542.png",
-      "tags": [
-        "噪声聋",
-        "听力分级",
-        "GBZ49",
-        "纯音测听"
-      ],
-      "date": "2026-02-19",
-      "source": "NotebookLM"
-    },
-    {
-      "id": "post-910289",
-      "title": "职业性噪声聋听力损失分级示意图",
-      "description": "根据GBZ 49-2014标准，展示噪声聋听力损失的分级标准与对应纯音测听结果。",
-      "filename": "post-908793.png",
-      "tags": [
-        "噪声聋",
-        "听力分级",
-        "GBZ49",
-        "纯音测听"
-      ],
-      "date": "2026-02-19",
-      "source": "NotebookLM"
-    },
-    {
-      "id": "post-938981",
+      "id": "hearing-loss-grade-diagram",
       "title": "听力损失分级诊断流程图",
       "description": "根据GBZ 49-2014标准，展示职业性噪声聋的诊断流程与听力损失分级标准。",
       "filename": "test-hearing-loss-diagram.png",
