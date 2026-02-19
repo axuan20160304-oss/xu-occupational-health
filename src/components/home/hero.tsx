@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
       {/* Dot grid background */}
-      <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-40" />
+      <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-[0.15]" />
       {/* Gradient orbs */}
       <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[var(--brand)] opacity-[0.04] blur-[80px]" />
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-[var(--accent)] opacity-[0.06] blur-[80px]" />
