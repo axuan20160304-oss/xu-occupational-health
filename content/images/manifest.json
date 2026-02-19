@@ -40,7 +40,20 @@
       ],
       "date": "2026-02-19",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-938981",
+      "title": "听力损失分级诊断流程图",
+      "description": "根据GBZ 49-2014标准，展示职业性噪声聋的诊断流程与听力损失分级标准。",
+      "filename": "test-hearing-loss-diagram.png",
+      "tags": [
+        "噪声聋",
+        "诊断流程",
+        "GBZ49"
+      ],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-19T11:01:50.289Z"
+  "updatedAt": "2026-02-19T11:02:18.981Z"
 }
