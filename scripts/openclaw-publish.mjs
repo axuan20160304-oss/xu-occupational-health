@@ -374,6 +374,14 @@ function gitCommitAndPush(filePaths, title, module) {
   } catch (e) {
     console.log(`   ⚠️ 本地部署: ${e.message.split("\n")[0]}`);
   }
+  // Auto deploy to Vercel
+  try {
+    console.log(`   ☁️  正在部署到 Vercel...`);
+    execSync(`npx vercel --prod --yes`, { cwd: ROOT, stdio: "pipe", timeout: 300000 });
+    console.log(`   ✅ Vercel 部署成功 → https://site-nine-chi-41.vercel.app`);
+  } catch (e) {
+    console.log(`   ⚠️ Vercel 部署: ${e.message.split("\n")[0]}`);
+  }
 }
 
 main().catch((err) => {
