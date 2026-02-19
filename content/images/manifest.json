@@ -25,7 +25,21 @@
       ],
       "date": "2026-02-19",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-061005",
+      "title": "职业性噪声聋防护指南",
+      "description": "NotebookLM自动生成的噪声聋防护信息图，包含定义、诊断标准、分级、防护措施和健康监护",
+      "filename": "post-060993.png",
+      "tags": [
+        "噪声聋",
+        "防护",
+        "信息图",
+        "GBZ49"
+      ],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-19T12:23:12.808Z"
+  "updatedAt": "2026-02-19T12:44:21.005Z"
 }
