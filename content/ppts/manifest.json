@@ -25,7 +25,21 @@
       ],
       "date": "2026-02-19",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-192489",
+      "title": "职业性粉尘危害防护培训课件",
+      "description": "基于NotebookLM自动生成的职业性粉尘防护培训材料，涵盖粉尘分类、尘肺病诊断、接触限值、工程控制和职业健康监护",
+      "filename": "post-192478.png",
+      "tags": [
+        "粉尘",
+        "培训",
+        "尘肺病",
+        "防护"
+      ],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-19T12:23:24.972Z"
+  "updatedAt": "2026-02-19T14:26:32.489Z"
 }
