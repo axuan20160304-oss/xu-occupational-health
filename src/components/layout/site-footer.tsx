@@ -9,17 +9,17 @@ export function SiteFooter() {
             © {new Date().getFullYear()} 徐广军 · 职业病专业网站。为职业健康从业人员提供高质量信息支持。
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link className="hover:text-[var(--brand)]" href="/laws">
-              法律法规
+            <Link className="hover:text-[var(--brand)]" href="/standards">
+              标准法规
             </Link>
             <Link className="hover:text-[var(--brand)]" href="/articles">
               专业文章
             </Link>
-            <Link className="hover:text-[var(--brand)]" href="/standards">
-              GBZ速查
+            <Link className="hover:text-[var(--brand)]" href="/images">
+              图片资料
             </Link>
-            <Link className="hover:text-[var(--brand)]" href="/resources">
-              工具资源
+            <Link className="hover:text-[var(--brand)]" href="/ppts">
+              PPT课件
             </Link>
           </div>
         </div>

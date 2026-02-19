@@ -5,36 +5,35 @@ export interface NavigationItem {
 
 export const mainNavigation: NavigationItem[] = [
   { href: "/", label: "首页" },
-  { href: "/laws", label: "法律法规" },
+  { href: "/standards", label: "标准法规" },
   { href: "/articles", label: "专业文章" },
-  { href: "/standards", label: "GBZ速查" },
-  { href: "/resources", label: "工具资源" },
-  { href: "/about", label: "关于" },
+  { href: "/images", label: "图片资料" },
+  { href: "/ppts", label: "PPT课件" },
 ];
 
 export const quickAccessCards = [
   {
-    title: "法律法规更新",
-    description: "查看最新职业病防治法律、标准与规范更新。",
-    href: "/laws",
+    title: "GBZ标准与法规",
+    description: "GBZ职业健康标准、法律法规全文，支持PDF在线预览与下载。",
+    href: "/standards",
     badge: "OpenClaw 自动同步",
   },
   {
     title: "专业文章库",
-    description: "沉淀职业病诊疗、健康监护与案例研究内容。",
+    description: "职业病诊疗、健康监护与案例研究，AI整合专业内容。",
     href: "/articles",
-    badge: "支持 NotebookLM 生成",
+    badge: "OpenClaw 生成",
   },
   {
-    title: "GBZ 188 速查",
-    description: "按危害因素快速定位检查项目、周期与禁忌证。",
-    href: "/standards",
-    badge: "临床工作高频",
+    title: "图片资料库",
+    description: "职业健康相关图片资料，支持在线预览与高清下载。",
+    href: "/images",
+    badge: "NotebookLM 生成",
   },
   {
-    title: "多媒体资料",
-    description: "支持图片、PDF、PPT、思维导图与音频摘要展示。",
-    href: "/resources",
-    badge: "API 媒体对接",
+    title: "PPT课件库",
+    description: "职业健康培训课件与演示文稿，支持预览与下载。",
+    href: "/ppts",
+    badge: "NotebookLM 生成",
   },
 ] as const;

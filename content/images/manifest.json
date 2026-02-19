@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "id": "noise-hearing-diagram-001",
+      "title": "噪声性听力损失机制示意图",
+      "description": "展示噪声对内耳毛细胞的损伤机制，包括外毛细胞与内毛细胞的结构变化。",
+      "filename": "noise-hearing-diagram.png",
+      "tags": ["噪声聋", "听力损失", "机制图"],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
+    }
+  ],
+  "updatedAt": "2026-02-19T00:00:00.000Z"
+}

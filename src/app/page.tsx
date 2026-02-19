@@ -2,21 +2,26 @@ import { Hero } from "@/components/home/hero";
 import { QuickAccessGrid } from "@/components/home/quick-access-grid";
 import { LatestFeed } from "@/components/home/latest-feed";
 import { getContentList } from "@/lib/content";
+import { getImageList, getPptList } from "@/lib/media-store";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const allLaws = await getContentList("laws");
-  const allArticles = await getContentList("articles");
+  const [allLaws, allArticles, allImages, allPpts] = await Promise.all([
+    getContentList("laws"),
+    getContentList("articles"),
+    getImageList(),
+    getPptList(),
+  ]);
 
   const latestLaws = allLaws.slice(0, 4);
   const latestArticles = allArticles.slice(0, 4);
 
   const stats = [
-    { label: "法规条目", value: allLaws.length },
+    { label: "标准法规", value: allLaws.length },
     { label: "专业文章", value: allArticles.length },
-    { label: "API端点", value: 6 },
-    { label: "支持媒体类型", value: 5 },
+    { label: "图片资料", value: allImages.length },
+    { label: "PPT课件", value: allPpts.length },
   ];
 
   return (
@@ -42,13 +47,13 @@ export default async function Home() {
       {/* Maintenance info */}
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-alt)] p-6 text-sm leading-7 text-[var(--text-muted)]">
         <h2 className="mb-3 text-base font-semibold text-[var(--text-primary)]">
-          数据维护说明
+          内容来源说明
         </h2>
         <ul className="list-inside space-y-1">
-          <li>• 法规与文章以 MDX 格式存储，支持 Markdown 与自定义组件</li>
-          <li>• 支持 POST /api/smart-push 智能识别内容类型并自动分发</li>
-          <li>• 支持 POST /api/webhook/openclaw 对接 OpenClaw Telegram 机器人</li>
-          <li>• GBZ 标准数据通过 JSON 结构化存储，支持按危害因素检索</li>
+          <li>• 标准法规与文章由 OpenClaw AI 联网搜索、整合并自动推送</li>
+          <li>• 图片与PPT课件由 OpenClaw 调取 NotebookLM 生成后上传</li>
+          <li>• 标准法规支持 PDF 原文在线预览与下载</li>
+          <li>• GBZ 188 速查表按危害因素快速检索检查项目与禁忌证</li>
           <li>• 所有内容变更均通过 Git 版本控制，确保可追溯</li>
         </ul>
       </section>

@@ -4,7 +4,7 @@ import { formatDate } from "@/lib/utils";
 
 interface ContentCardProps {
   item: ContentMeta;
-  basePath: "/articles" | "/laws";
+  basePath: "/articles" | "/laws" | "/standards";
 }
 
 export function ContentCard({ item, basePath }: ContentCardProps) {

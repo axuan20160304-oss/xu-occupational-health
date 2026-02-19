@@ -136,13 +136,105 @@ async function main() {
     return;
   }
 
+  // Handle images and ppts modules (JSON manifest + file download)
+  if (module === "images" || module === "ppts") {
+    if (!data.title || !data.filename) {
+      console.error("❌ images/ppts 必须包含 title 和 filename 字段");
+      process.exit(1);
+    }
+
+    const subDir = module === "images" ? "images" : "ppts";
+    const uploadsDir = join(ROOT, "public", "uploads", subDir);
+    mkdirSync(uploadsDir, { recursive: true });
+
+    // Download file if URL provided
+    let localFilename = data.filename;
+    const filesToGitAdd = [];
+
+    if (data.fileUrl) {
+      const ext = data.filename.includes(".") ? "" : (module === "images" ? ".png" : ".pptx");
+      localFilename = slugify(data.title) + ext;
+      if (data.filename.includes(".")) {
+        const origExt = data.filename.substring(data.filename.lastIndexOf("."));
+        localFilename = slugify(data.title) + origExt;
+      }
+      const destPath = join(uploadsDir, localFilename);
+      try {
+        console.log(`   ⬇️  下载文件: ${data.title} ...`);
+        await downloadFile(data.fileUrl, destPath);
+        console.log(`   ✅ 已下载: ${localFilename}`);
+        filesToGitAdd.push(destPath);
+      } catch (e) {
+        console.log(`   ⚠️ 下载失败: ${e.message}`);
+      }
+    }
+
+    // Download thumbnail if provided
+    let localThumbnail = data.thumbnail || undefined;
+    if (data.thumbnailUrl) {
+      const thumbName = `thumb-${slugify(data.title)}.png`;
+      const thumbPath = join(uploadsDir, thumbName);
+      try {
+        console.log(`   ⬇️  下载缩略图...`);
+        await downloadFile(data.thumbnailUrl, thumbPath);
+        localThumbnail = thumbName;
+        filesToGitAdd.push(thumbPath);
+      } catch (e) {
+        console.log(`   ⚠️ 缩略图下载失败: ${e.message}`);
+      }
+    }
+
+    // Update manifest
+    const manifestDir = join(CONTENT_DIR, subDir);
+    mkdirSync(manifestDir, { recursive: true });
+    const manifestPath = join(manifestDir, "manifest.json");
+
+    let manifest = { items: [], updatedAt: new Date().toISOString() };
+    try {
+      const raw = readFileSync(manifestPath, "utf-8");
+      manifest = JSON.parse(raw);
+      if (!Array.isArray(manifest.items)) manifest.items = [];
+    } catch {}
+
+    const newItem = {
+      id: data.id || slugify(data.title),
+      title: data.title,
+      description: data.description || "",
+      filename: localFilename,
+      thumbnail: localThumbnail,
+      tags: data.tags || [],
+      date: data.date || new Date().toISOString().slice(0, 10),
+      source: data.source || "openclaw",
+    };
+
+    // Replace existing item with same id, or append
+    const idx = manifest.items.findIndex((i) => i.id === newItem.id);
+    if (idx >= 0) {
+      manifest.items[idx] = newItem;
+    } else {
+      manifest.items.push(newItem);
+    }
+    manifest.updatedAt = new Date().toISOString();
+
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), "utf-8");
+    filesToGitAdd.push(manifestPath);
+
+    const label = module === "images" ? "图片" : "PPT";
+    console.log(`✅ 已添加${label}：${data.title}`);
+    console.log(`   文件：${localFilename}`);
+    console.log(`   链接：https://xu-occupational-health.netlify.app/${module}`);
+
+    gitCommitAndPush(filesToGitAdd, data.title, module);
+    return;
+  }
+
   if (!data.title || !data.content) {
     console.error("❌ 必须包含 title 和 content 字段");
     process.exit(1);
   }
 
   if (!["laws", "articles"].includes(module)) {
-    console.error("❌ module 必须是 laws、articles 或 standards");
+    console.error("❌ module 必须是 laws、articles、standards、images 或 ppts");
     process.exit(1);
   }
 
@@ -228,7 +320,7 @@ async function downloadAttachments(attachments) {
 }
 
 function gitCommitAndPush(filePaths, title, module) {
-  const labels = { laws: "法规", articles: "文章", standards: "GBZ标准" };
+  const labels = { laws: "法规", articles: "文章", standards: "GBZ标准", images: "图片", ppts: "PPT" };
   const label = labels[module] || module;
   const msg = `content: 添加${label} - ${title}`;
   try {
