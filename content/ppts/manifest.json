@@ -5,10 +5,27 @@
       "title": "职业健康基础培训课件",
       "description": "涵盖职业病防治法要点、常见职业病危害因素识别、个人防护用品选用等基础内容。",
       "filename": "oh-training-basics.pptx",
-      "tags": ["培训", "基础知识", "职业健康"],
+      "tags": [
+        "培训",
+        "基础知识",
+        "职业健康"
+      ],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
+    },
+    {
+      "id": "post-963866",
+      "title": "噪声聋防护基础培训课件",
+      "description": "涵盖噪声聋诊断标准GBZ49、听力保护措施、个人防护用品选用等培训内容。",
+      "filename": "test-noise-training.pptx",
+      "tags": [
+        "噪声聋",
+        "培训课件",
+        "防护措施"
+      ],
       "date": "2026-02-19",
       "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-19T00:00:00.000Z"
+  "updatedAt": "2026-02-19T11:02:43.866Z"
 }
