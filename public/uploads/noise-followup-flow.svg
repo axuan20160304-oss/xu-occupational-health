@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" fill="none">
+  <rect width="1200" height="520" fill="#f5f9fc"/>
+  <text x="60" y="70" fill="#10243d" font-size="32" font-family="Noto Sans SC, Arial">噪声异常复查流程图（示例）</text>
+
+  <rect x="70" y="160" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="185" y="212" fill="#10243d" font-size="22" font-family="Noto Sans SC, Arial" text-anchor="middle">年度体检筛查</text>
+
+  <rect x="370" y="160" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="485" y="212" fill="#10243d" font-size="22" font-family="Noto Sans SC, Arial" text-anchor="middle">听力异常复核</text>
+
+  <rect x="670" y="160" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="785" y="212" fill="#10243d" font-size="22" font-family="Noto Sans SC, Arial" text-anchor="middle">限期复查</text>
+
+  <rect x="970" y="160" width="180" height="90" rx="14" fill="#0a66c2"/>
+  <text x="1060" y="212" fill="white" font-size="22" font-family="Noto Sans SC, Arial" text-anchor="middle">结论分层</text>
+
+  <path d="M300 205 H370" stroke="#0a66c2" stroke-width="4"/>
+  <path d="M600 205 H670" stroke="#0a66c2" stroke-width="4"/>
+  <path d="M900 205 H970" stroke="#0a66c2" stroke-width="4"/>
+
+  <rect x="360" y="320" width="480" height="120" rx="14" fill="#eef4fb" stroke="#d5e3f3"/>
+  <text x="600" y="372" fill="#10243d" font-size="20" font-family="Noto Sans SC, Arial" text-anchor="middle">异常人员随访、岗位建议、企业告知与留痕管理</text>
+</svg>

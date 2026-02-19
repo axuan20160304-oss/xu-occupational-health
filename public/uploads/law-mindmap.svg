@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#f5f9fc"/>
+  <rect x="455" y="296" width="290" height="128" rx="18" fill="#0a66c2"/>
+  <text x="600" y="352" fill="white" font-size="34" font-family="Noto Sans SC, Arial" text-anchor="middle">职业病防治法</text>
+  <text x="600" y="389" fill="#d8ebff" font-size="18" font-family="Noto Sans SC, Arial" text-anchor="middle">条款结构思维导图（示例）</text>
+
+  <rect x="120" y="120" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="235" y="167" fill="#10243d" font-size="24" font-family="Noto Sans SC, Arial" text-anchor="middle">总则</text>
+
+  <rect x="120" y="510" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="235" y="557" fill="#10243d" font-size="24" font-family="Noto Sans SC, Arial" text-anchor="middle">法律责任</text>
+
+  <rect x="850" y="120" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="965" y="167" fill="#10243d" font-size="24" font-family="Noto Sans SC, Arial" text-anchor="middle">监护管理</text>
+
+  <rect x="850" y="510" width="230" height="90" rx="14" fill="#ffffff" stroke="#d5e3f3"/>
+  <text x="965" y="557" fill="#10243d" font-size="24" font-family="Noto Sans SC, Arial" text-anchor="middle">报告处置</text>
+
+  <path d="M455 340 C380 330 340 270 350 210" stroke="#0a66c2" stroke-width="4"/>
+  <path d="M455 380 C380 400 340 480 350 540" stroke="#0a66c2" stroke-width="4"/>
+  <path d="M745 340 C820 330 860 270 850 210" stroke="#0a66c2" stroke-width="4"/>
+  <path d="M745 380 C820 400 860 480 850 540" stroke="#0a66c2" stroke-width="4"/>
+</svg>
