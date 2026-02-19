@@ -364,13 +364,15 @@ function gitCommitAndPush(filePaths, title, module) {
   } catch (e) {
     console.log(`   ⚠️ Git push: ${e.message.split("\n")[0]}`);
   }
-  // Auto deploy to Vercel
+  // Auto rebuild and restart local server
   try {
-    console.log(`   🌐 正在部署到 Vercel...`);
-    execSync(`vercel --prod --yes`, { cwd: ROOT, stdio: "pipe", timeout: 180000 });
-    console.log(`   ✅ Vercel 部署成功`);
+    console.log(`   🔨 正在重新构建...`);
+    execSync(`npm run build`, { cwd: ROOT, stdio: "pipe", timeout: 120000 });
+    console.log(`   ✅ 构建成功`);
+    execSync(`pm2 restart xu-health-site`, { cwd: ROOT, stdio: "pipe" });
+    console.log(`   🌐 本地服务器已重启 → http://localhost:3000`);
   } catch (e) {
-    console.log(`   ⚠️ Vercel 部署: ${e.message.split("\n")[0]}`);
+    console.log(`   ⚠️ 本地部署: ${e.message.split("\n")[0]}`);
   }
 }
 
