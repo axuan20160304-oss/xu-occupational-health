@@ -14,41 +14,39 @@ export function Hero() {
       {/* Top highlight line */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--brand)] to-transparent opacity-20" />
 
-      <div className="relative px-6 py-14 sm:px-12 sm:py-20">
+      <div className="relative px-6 py-16 sm:px-12 sm:py-24">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-3xl"
+          className="mx-auto max-w-3xl text-center"
         >
           {/* Status badge */}
-          <div className="pill mb-6 border border-[var(--border)] bg-[var(--surface-alt)] shadow-[var(--shadow-xs)]">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-alt)] px-3.5 py-1.5 text-[12px] shadow-[var(--shadow-xs)]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--success)] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--success)]" />
             </span>
-            <span className="text-[var(--text-muted)]">职业病专业知识平台</span>
-            <span className="mx-0.5 text-[var(--border)]">|</span>
-            <span className="font-semibold text-[var(--brand)]">AI 驱动</span>
+            <span className="font-medium text-[var(--brand)]">AI 驱动</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-balance text-[28px] font-extrabold leading-[1.15] tracking-[-0.02em] text-[var(--text-primary)] sm:text-[48px]">
+          <h1 className="text-balance text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em] text-[var(--text-primary)] sm:text-[52px]">
             面向职业病防治专业人员的
-            <br className="hidden sm:block" />
+            <br />
             <span className="text-gradient">智能知识中枢</span>
           </h1>
 
           {/* Description */}
-          <p className="mt-5 max-w-xl text-[15px] leading-[1.7] text-[var(--text-muted)] sm:text-[17px]">
-            聚合 GBZ 职业健康标准、法律法规与实务经验。通过 OpenClaw AI 自动搜索整合，助力职业健康团队高效决策。
+          <p className="mx-auto mt-6 max-w-2xl text-[15px] leading-[1.8] text-[var(--text-muted)] sm:text-[17px]">
+            整合标准法规、专业文章、图片资料和PPT课件，为职业病防治工作者提供全方位的知识支持
           </p>
 
           {/* CTA buttons */}
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/standards"
-              className="group inline-flex items-center gap-2 rounded-[var(--radius-sm)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[var(--shadow-md)]"
+              className="group inline-flex items-center gap-2 rounded-[var(--radius-sm)] px-6 py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)]"
               style={{ background: "var(--gradient-brand)" }}
             >
               浏览标准法规
@@ -56,13 +54,10 @@ export function Hero() {
             </Link>
             <Link
               href="/articles"
-              className="inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-5 py-2.5 text-[13px] font-semibold text-[var(--text-primary)] shadow-[var(--shadow-xs)] hover:border-[var(--brand)] hover:shadow-[var(--shadow-glow)]"
+              className="inline-flex items-center gap-2 rounded-[var(--radius-sm)] border-2 border-[var(--border)] bg-[var(--surface)] px-6 py-2.5 text-[14px] font-semibold text-[var(--text-primary)] hover:border-[var(--brand)] hover:text-[var(--brand)]"
             >
               专业文章
             </Link>
-            <span className="hidden text-[13px] text-[var(--text-subtle)] sm:inline">
-              内容由 AI 自动更新 · 版本可追溯
-            </span>
           </div>
         </motion.div>
       </div>

@@ -20,6 +20,7 @@ const icons: Record<string, ReactNode> = {
 export function QuickAccessGrid() {
   return (
     <section className="animate-fade-up-delay-2">
+      <h2 className="mb-4 text-[15px] font-semibold text-[var(--text-primary)]">快速访问</h2>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {quickAccessCards.map((card) => (
           <Link

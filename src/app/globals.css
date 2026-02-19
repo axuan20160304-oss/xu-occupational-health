@@ -34,7 +34,7 @@
   --shadow-glow: 0 0 0 1px rgba(37,99,235,0.1), 0 4px 16px rgba(37,99,235,0.08);
   --gradient-brand: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  --dot-color: #e5e7eb;
+  --dot-color: #2563eb;
   --dot-size: 1px;
   --dot-gap: 24px;
 }
