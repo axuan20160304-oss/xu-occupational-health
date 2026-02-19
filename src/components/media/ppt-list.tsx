@@ -9,6 +9,10 @@ interface PptListProps {
   ppts: MediaItem[];
 }
 
+function isPdf(filename: string) {
+  return filename.toLowerCase().endsWith(".pdf");
+}
+
 export function PptList({ ppts }: PptListProps) {
   const [preview, setPreview] = useState<MediaItem | null>(null);
 
@@ -103,30 +107,40 @@ export function PptList({ ppts }: PptListProps) {
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-center p-8" style={{ minHeight: "400px" }}>
-              <div className="text-center space-y-4">
-                <FileType2 size={64} className="mx-auto text-orange-500" />
-                <p className="text-sm text-[var(--text-muted)]">
-                  PPT 文件暂不支持在线预览，请下载后查看。
-                </p>
-                <a
-                  href={`/uploads/ppts/${preview.filename}`}
-                  download={preview.filename}
-                  className="inline-block rounded-lg bg-[var(--brand)] px-6 py-2.5 text-sm font-medium text-white hover:opacity-90 transition"
-                >
-                  下载 {preview.filename}
-                </a>
-                {preview.thumbnail && (
-                  <div className="mt-4">
-                    <img
-                      src={`/uploads/ppts/${preview.thumbnail}`}
-                      alt={`${preview.title} 预览`}
-                      className="mx-auto max-h-[400px] rounded-lg border border-[var(--border)]"
-                    />
-                  </div>
-                )}
+            {isPdf(preview.filename) ? (
+              <div className="p-4" style={{ height: "calc(90vh - 60px)" }}>
+                <iframe
+                  src={`/uploads/ppts/${preview.filename}`}
+                  className="h-full w-full rounded-lg border-0"
+                  title={preview.title}
+                />
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center justify-center p-8" style={{ minHeight: "400px" }}>
+                <div className="text-center space-y-4">
+                  <FileType2 size={64} className="mx-auto text-orange-500" />
+                  <p className="text-sm text-[var(--text-muted)]">
+                    PPT 文件暂不支持在线预览，请下载后查看。
+                  </p>
+                  <a
+                    href={`/uploads/ppts/${preview.filename}`}
+                    download={preview.filename}
+                    className="inline-block rounded-lg bg-[var(--brand)] px-6 py-2.5 text-sm font-medium text-white hover:opacity-90 transition"
+                  >
+                    下载 {preview.filename}
+                  </a>
+                  {preview.thumbnail && (
+                    <div className="mt-4">
+                      <img
+                        src={`/uploads/ppts/${preview.thumbnail}`}
+                        alt={`${preview.title} 预览`}
+                        className="mx-auto max-h-[400px] rounded-lg border border-[var(--border)]"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

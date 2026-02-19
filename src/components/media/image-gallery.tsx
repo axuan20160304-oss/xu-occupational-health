@@ -9,6 +9,10 @@ interface ImageGalleryProps {
   images: MediaItem[];
 }
 
+function isPdf(filename: string) {
+  return filename.toLowerCase().endsWith(".pdf");
+}
+
 export function ImageGallery({ images }: ImageGalleryProps) {
   const [preview, setPreview] = useState<MediaItem | null>(null);
 
@@ -24,14 +28,21 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             onClick={() => setPreview(img)}
           >
             <div className="relative aspect-[4/3] w-full bg-[var(--surface-alt)]">
-              <Image
-                src={`/uploads/images/${img.filename}`}
-                alt={img.title}
-                fill
-                className="object-cover transition group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                unoptimized
-              />
+              {isPdf(img.filename) ? (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[var(--text-muted)]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M10 12l-2 4h4l-2 4"/></svg>
+                  <span className="text-xs font-medium">PDF 文档</span>
+                </div>
+              ) : (
+                <Image
+                  src={`/uploads/images/${img.filename}`}
+                  alt={img.title}
+                  fill
+                  className="object-cover transition group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  unoptimized
+                />
+              )}
             </div>
             <div className="p-4">
               <h3 className="line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">
@@ -92,14 +103,22 @@ export function ImageGallery({ images }: ImageGalleryProps) {
               </div>
             </div>
             <div className="relative flex items-center justify-center bg-black/5 p-4" style={{ maxHeight: "calc(90vh - 60px)" }}>
-              <Image
-                src={`/uploads/images/${preview.filename}`}
-                alt={preview.title}
-                width={1200}
-                height={800}
-                className="max-h-[calc(90vh-100px)] w-auto object-contain"
-                unoptimized
-              />
+              {isPdf(preview.filename) ? (
+                <iframe
+                  src={`/uploads/images/${preview.filename}`}
+                  className="h-[calc(90vh-100px)] w-full rounded-lg border-0"
+                  title={preview.title}
+                />
+              ) : (
+                <Image
+                  src={`/uploads/images/${preview.filename}`}
+                  alt={preview.title}
+                  width={1200}
+                  height={800}
+                  className="max-h-[calc(90vh-100px)] w-auto object-contain"
+                  unoptimized
+                />
+              )}
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@
  *   attachments: [{name, url, type}] 附件列表 (可选，url 为远程地址时自动下载到 public/uploads/)
  */
 
-import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync, existsSync, copyFileSync } from "node:fs";
 import { join, dirname, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -159,13 +159,36 @@ async function main() {
         localFilename = slugify(data.title) + origExt;
       }
       const destPath = join(uploadsDir, localFilename);
-      try {
-        console.log(`   ⬇️  下载文件: ${data.title} ...`);
-        await downloadFile(data.fileUrl, destPath);
-        console.log(`   ✅ 已下载: ${localFilename}`);
-        filesToGitAdd.push(destPath);
-      } catch (e) {
-        console.log(`   ⚠️ 下载失败: ${e.message}`);
+
+      // Resolve ~ to home directory
+      let srcPath = data.fileUrl;
+      if (srcPath.startsWith("~")) {
+        srcPath = join(process.env.HOME || "/tmp", srcPath.slice(1));
+      }
+
+      // Local file path: copy directly
+      if (srcPath.startsWith("/") && !srcPath.startsWith("http")) {
+        try {
+          if (!existsSync(srcPath)) {
+            console.log(`   ⚠️ 本地文件不存在: ${srcPath}`);
+          } else {
+            copyFileSync(srcPath, destPath);
+            console.log(`   ✅ 已复制本地文件: ${srcPath} → ${localFilename}`);
+            filesToGitAdd.push(destPath);
+          }
+        } catch (e) {
+          console.log(`   ⚠️ 复制失败: ${e.message}`);
+        }
+      } else {
+        // Remote URL: download
+        try {
+          console.log(`   ⬇️  下载文件: ${data.title} ...`);
+          await downloadFile(data.fileUrl, destPath);
+          console.log(`   ✅ 已下载: ${localFilename}`);
+          filesToGitAdd.push(destPath);
+        } catch (e) {
+          console.log(`   ⚠️ 下载失败: ${e.message}`);
+        }
       }
     }
 
