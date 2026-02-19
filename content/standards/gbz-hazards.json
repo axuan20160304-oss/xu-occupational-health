@@ -1,0 +1,63 @@
+{
+  "hazards": [
+    {
+      "code": "5.1",
+      "name": "铅及其化合物",
+      "category": "化学因素",
+      "checks": [
+        "血铅",
+        "尿铅",
+        "血常规",
+        "肝肾功能"
+      ],
+      "cycle": "在岗期间每6个月1次",
+      "contraindications": [
+        "贫血",
+        "肝肾功能异常",
+        "神经系统疾病"
+      ],
+      "targetDiseases": [
+        "慢性铅中毒",
+        "铅性贫血"
+      ]
+    },
+    {
+      "code": "5.45",
+      "name": "正己烷",
+      "category": "化学因素",
+      "checks": [
+        "神经系统检查",
+        "肌电图",
+        "血常规"
+      ],
+      "cycle": "在岗期间每12个月1次",
+      "contraindications": [
+        "周围神经病",
+        "严重肝病"
+      ],
+      "targetDiseases": [
+        "职业性慢性正己烷中毒"
+      ]
+    },
+    {
+      "code": "6.5",
+      "name": "电焊烟尘",
+      "category": "粉尘",
+      "checks": [
+        "胸部X线",
+        "肺功能",
+        "血常规"
+      ],
+      "cycle": "在岗期间每12-24个月1次",
+      "contraindications": [
+        "活动性肺结核",
+        "严重肺功能损伤"
+      ],
+      "targetDiseases": [
+        "电焊工尘肺"
+      ]
+    }
+  ],
+  "source": "openclaw",
+  "updatedAt": "2026-02-19T09:15:49.360Z"
+}
