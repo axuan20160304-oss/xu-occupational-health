@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 interface ContentItem {
   slug: string;
@@ -19,6 +19,42 @@ export default function AdminPage() {
   const [laws, setLaws] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadTargetSlug = useRef<string>("");
+
+  async function handlePdfUpload(slug: string) {
+    uploadTargetSlug.current = slug;
+    fileInputRef.current?.click();
+  }
+
+  async function onFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const slug = uploadTargetSlug.current;
+    setUploading(slug);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("slug", slug);
+
+      const res = await fetch("/api/admin/upload-pdf", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`PDF 已上传成功！URL: ${data.url}\n下次部署后生效。`);
+      } else {
+        alert(`上传失败: ${data.message}`);
+      }
+    } catch {
+      alert("上传请求失败");
+    }
+    setUploading(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -82,6 +118,13 @@ export default function AdminPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf"
+        className="hidden"
+        onChange={onFileSelected}
+      />
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[var(--text-primary)]">管理后台</h1>
@@ -177,13 +220,22 @@ export default function AdminPage() {
                         <span>{item.date}</span>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleDelete("laws", item.slug)}
-                      disabled={deleting === `laws/${item.slug}`}
-                      className="ml-3 shrink-0 rounded-[var(--radius-sm)] border border-red-200 px-3 py-1.5 text-[12px] font-medium text-red-500 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
-                    >
-                      {deleting === `laws/${item.slug}` ? "删除中..." : "删除"}
-                    </button>
+                    <div className="ml-3 flex shrink-0 gap-2">
+                      <button
+                        onClick={() => handlePdfUpload(item.slug)}
+                        disabled={uploading === item.slug}
+                        className="rounded-[var(--radius-sm)] border border-blue-200 px-3 py-1.5 text-[12px] font-medium text-blue-500 hover:bg-blue-50 disabled:opacity-50 dark:border-blue-800 dark:hover:bg-blue-950"
+                      >
+                        {uploading === item.slug ? "上传中..." : "上传PDF"}
+                      </button>
+                      <button
+                        onClick={() => handleDelete("laws", item.slug)}
+                        disabled={deleting === `laws/${item.slug}`}
+                        className="rounded-[var(--radius-sm)] border border-red-200 px-3 py-1.5 text-[12px] font-medium text-red-500 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
+                      >
+                        {deleting === `laws/${item.slug}` ? "删除中..." : "删除"}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
