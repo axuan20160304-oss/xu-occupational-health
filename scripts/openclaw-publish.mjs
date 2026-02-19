@@ -16,12 +16,15 @@
  *   tags:     ["标签1", "标签2"]
  *   content:  Markdown 正文 (laws/articles 必填)
  *   hazards:  GBZ 标准数组 (standards 必填)
+ *   attachments: [{name, url, type}] 附件列表 (可选，url 为远程地址时自动下载到 public/uploads/)
  */
 
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
+import { join, dirname, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
+import https from "node:https";
+import http from "node:http";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -45,7 +48,14 @@ function sanitizeYaml(value) {
   return String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
-function buildMdx({ title, summary, date, category, tags, author, content }) {
+function buildAttachmentsYaml(attachments) {
+  if (!attachments || attachments.length === 0) return "attachments: []";
+  return "attachments:\n" + attachments.map((a) =>
+    `  - name: "${sanitizeYaml(a.name)}"\n    url: "${sanitizeYaml(a.url)}"\n    type: "${sanitizeYaml(a.type || "pdf")}"`
+  ).join("\n");
+}
+
+function buildMdx({ title, summary, date, category, tags, author, content, attachments }) {
   const d = date || new Date().toISOString().slice(0, 10);
   const t = tags && tags.length > 0
     ? tags.map((tag) => `  - "${sanitizeYaml(tag)}"`).join("\n")
@@ -58,7 +68,7 @@ category: "${sanitizeYaml(category || "未分类")}"
 ${author ? `author: "${sanitizeYaml(author)}"` : ""}
 tags:
 ${t}
-attachments: []
+${buildAttachmentsYaml(attachments)}
 ---
 
 ${content}
@@ -136,11 +146,14 @@ async function main() {
     process.exit(1);
   }
 
+  // Handle attachments: download remote files to public/uploads/
+  const localAttachments = await downloadAttachments(data.attachments || []);
+
   const dir = join(CONTENT_DIR, module);
   mkdirSync(dir, { recursive: true });
   const slug = slugify(data.title);
   const filePath = join(dir, `${slug}.mdx`);
-  const mdx = buildMdx(data);
+  const mdx = buildMdx({ ...data, attachments: localAttachments });
   writeFileSync(filePath, mdx, "utf-8");
 
   const moduleLabels = { laws: "法规", articles: "文章" };
@@ -148,16 +161,79 @@ async function main() {
   console.log(`   文件：${filePath}`);
   console.log(`   slug：${slug}`);
   console.log(`   链接：https://xu-occupational-health.netlify.app/${module}/${slug}`);
+  if (localAttachments.length > 0) {
+    console.log(`   📎 附件：${localAttachments.length} 个`);
+    localAttachments.forEach((a) => console.log(`      - ${a.name} → ${a.url}`));
+  }
 
-  gitCommitAndPush(filePath, data.title, module);
+  // Git add both content file and any downloaded attachments
+  const filesToAdd = [filePath, ...localAttachments.map((a) => join(ROOT, "public", a.url))];
+  gitCommitAndPush(filesToAdd, data.title, module);
 }
 
-function gitCommitAndPush(filePath, title, module) {
+async function downloadFile(url, destPath) {
+  return new Promise((resolve, reject) => {
+    const proto = url.startsWith("https") ? https : http;
+    const request = (reqUrl, redirectCount = 0) => {
+      if (redirectCount > 5) return reject(new Error("Too many redirects"));
+      proto.get(reqUrl, { headers: { "User-Agent": "Mozilla/5.0" } }, (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          return request(res.headers.location, redirectCount + 1);
+        }
+        if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`));
+        const chunks = [];
+        res.on("data", (c) => chunks.push(c));
+        res.on("end", () => {
+          mkdirSync(dirname(destPath), { recursive: true });
+          writeFileSync(destPath, Buffer.concat(chunks));
+          resolve();
+        });
+        res.on("error", reject);
+      }).on("error", reject);
+    };
+    request(url);
+  });
+}
+
+async function downloadAttachments(attachments) {
+  if (!attachments || attachments.length === 0) return [];
+  const uploadsDir = join(ROOT, "public", "uploads");
+  mkdirSync(uploadsDir, { recursive: true });
+  const results = [];
+  for (const att of attachments) {
+    if (!att.url || !att.name) continue;
+    // If already a local path, keep as-is
+    if (att.url.startsWith("/uploads/")) {
+      results.push(att);
+      continue;
+    }
+    // Remote URL: download to public/uploads/
+    const ext = extname(new URL(att.url).pathname) || ".pdf";
+    const filename = slugify(att.name) + ext;
+    const destPath = join(uploadsDir, filename);
+    try {
+      console.log(`   ⬇️  下载附件: ${att.name} ...`);
+      await downloadFile(att.url, destPath);
+      console.log(`   ✅ 已下载: ${filename}`);
+      results.push({ name: att.name, url: `/uploads/${filename}`, type: att.type || "pdf" });
+    } catch (e) {
+      console.log(`   ⚠️ 下载失败: ${att.name} - ${e.message}`);
+      // Still include the remote URL as fallback
+      results.push(att);
+    }
+  }
+  return results;
+}
+
+function gitCommitAndPush(filePaths, title, module) {
   const labels = { laws: "法规", articles: "文章", standards: "GBZ标准" };
   const label = labels[module] || module;
   const msg = `content: 添加${label} - ${title}`;
   try {
-    execSync(`git add "${filePath}"`, { cwd: ROOT, stdio: "pipe" });
+    const paths = Array.isArray(filePaths) ? filePaths : [filePaths];
+    for (const fp of paths) {
+      execSync(`git add "${fp}"`, { cwd: ROOT, stdio: "pipe" });
+    }
     execSync(`git commit -m "${msg.replace(/"/g, '\\"')}"`, { cwd: ROOT, stdio: "pipe" });
     console.log(`   📦 Git commit 成功`);
   } catch (e) {
