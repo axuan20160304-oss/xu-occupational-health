@@ -20,6 +20,12 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [addingStd, setAddingStd] = useState(false);
+  const [stdNumber, setStdNumber] = useState("");
+  const [stdTitle, setStdTitle] = useState("");
+  const [stdSummary, setStdSummary] = useState("");
+  const [stdPdfUrl, setStdPdfUrl] = useState("");
+  const [stdResult, setStdResult] = useState<{ ok: boolean; msg: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadTargetSlug = useRef<string>("");
 
@@ -54,6 +60,40 @@ export default function AdminPage() {
     }
     setUploading(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  async function handleAddStandard(e: React.FormEvent) {
+    e.preventDefault();
+    if (!stdNumber.trim()) return;
+    setAddingStd(true);
+    setStdResult(null);
+
+    try {
+      const res = await fetch("/api/admin/fetch-standard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          standardNumber: stdNumber.trim(),
+          title: stdTitle.trim() || undefined,
+          summary: stdSummary.trim() || undefined,
+          pdfUrl: stdPdfUrl.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStdResult({ ok: true, msg: data.message });
+        setStdNumber("");
+        setStdTitle("");
+        setStdSummary("");
+        setStdPdfUrl("");
+        fetchContent();
+      } else {
+        setStdResult({ ok: false, msg: data.message });
+      }
+    } catch {
+      setStdResult({ ok: false, msg: "请求失败" });
+    }
+    setAddingStd(false);
   }
 
   useEffect(() => {
@@ -199,6 +239,86 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+          </section>
+
+          {/* Add Standard Form */}
+          <section className="mb-8">
+            <h2 className="mb-3 text-[15px] font-semibold text-[var(--text-primary)]">
+              添加标准
+            </h2>
+            <div className="card p-5">
+              <form onSubmit={handleAddStandard} className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-[12px] font-medium text-[var(--text-muted)]">
+                      标准编号 *
+                    </label>
+                    <input
+                      type="text"
+                      value={stdNumber}
+                      onChange={(e) => setStdNumber(e.target.value)}
+                      placeholder="例如：GBZ 49-2014"
+                      className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--brand)]"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-[12px] font-medium text-[var(--text-muted)]">
+                      标准名称
+                    </label>
+                    <input
+                      type="text"
+                      value={stdTitle}
+                      onChange={(e) => setStdTitle(e.target.value)}
+                      placeholder="例如：职业性噪声聋诊断标准"
+                      className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--brand)]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[12px] font-medium text-[var(--text-muted)]">
+                    摘要说明
+                  </label>
+                  <input
+                    type="text"
+                    value={stdSummary}
+                    onChange={(e) => setStdSummary(e.target.value)}
+                    placeholder="标准的简要说明（可选）"
+                    className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--brand)]"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[12px] font-medium text-[var(--text-muted)]">
+                    PDF 下载链接（自动下载并上传到网站）
+                  </label>
+                  <input
+                    type="url"
+                    value={stdPdfUrl}
+                    onChange={(e) => setStdPdfUrl(e.target.value)}
+                    placeholder="https://example.com/standard.pdf"
+                    className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[13px] text-[var(--text-primary)] outline-none focus:border-[var(--brand)]"
+                  />
+                  <p className="mt-1 text-[11px] text-[var(--text-subtle)]">
+                    填入 PDF 链接后，系统会自动下载并上传到网站，在标准详情页提供预览和下载
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="submit"
+                    disabled={addingStd || !stdNumber.trim()}
+                    className="rounded-[var(--radius-sm)] px-5 py-2 text-[13px] font-semibold text-white disabled:opacity-50"
+                    style={{ background: "var(--gradient-brand)" }}
+                  >
+                    {addingStd ? "添加中..." : "添加标准"}
+                  </button>
+                  {stdResult && (
+                    <span className={`text-[12px] ${stdResult.ok ? "text-green-600" : "text-red-500"}`}>
+                      {stdResult.msg}
+                    </span>
+                  )}
+                </div>
+              </form>
+            </div>
           </section>
 
           {/* Laws */}
