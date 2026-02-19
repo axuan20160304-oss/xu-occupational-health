@@ -1,45 +1,4 @@
 {
-  "items": [
-    {
-      "id": "oh-training-basics-001",
-      "title": "职业健康基础培训课件",
-      "description": "涵盖职业病防治法要点、常见职业病危害因素识别、个人防护用品选用等基础内容。",
-      "filename": "oh-training-basics.pptx",
-      "tags": [
-        "培训",
-        "基础知识",
-        "职业健康"
-      ],
-      "date": "2026-02-19",
-      "source": "NotebookLM"
-    },
-    {
-      "id": "post-963866",
-      "title": "噪声聋防护基础培训课件",
-      "description": "涵盖噪声聋诊断标准GBZ49、听力保护措施、个人防护用品选用等培训内容。",
-      "filename": "test-noise-training.pptx",
-      "tags": [
-        "噪声聋",
-        "培训课件",
-        "防护措施"
-      ],
-      "date": "2026-02-19",
-      "source": "NotebookLM"
-    },
-    {
-      "id": "post-192489",
-      "title": "职业性粉尘危害防护培训课件",
-      "description": "基于NotebookLM自动生成的职业性粉尘防护培训材料，涵盖粉尘分类、尘肺病诊断、接触限值、工程控制和职业健康监护",
-      "filename": "post-192478.png",
-      "tags": [
-        "粉尘",
-        "培训",
-        "尘肺病",
-        "防护"
-      ],
-      "date": "2026-02-19",
-      "source": "NotebookLM"
-    }
-  ],
-  "updatedAt": "2026-02-19T14:26:32.489Z"
+  "items": [],
+  "updatedAt": "2026-02-20T00:00:00.000Z"
 }
