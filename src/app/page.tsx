@@ -8,10 +8,10 @@ import { getImageList, getPptList } from "@/lib/media-store";
 export const dynamic = "force-dynamic";
 
 const statMeta = [
-  { label: "标准法规", href: "/standards", icon: "📋" },
-  { label: "专业文章", href: "/articles", icon: "📝" },
-  { label: "图片资料", href: "/images", icon: "🖼️" },
-  { label: "PPT课件", href: "/ppts", icon: "📊" },
+  { label: "标准法规", href: "/standards" },
+  { label: "专业文章", href: "/articles" },
+  { label: "图片资料", href: "/images" },
+  { label: "PPT课件", href: "/ppts" },
 ];
 
 export default async function Home() {
@@ -29,19 +29,19 @@ export default async function Home() {
   const totalCount = counts.reduce((a, b) => a + b, 0);
 
   return (
-    <main className="mx-auto w-full max-w-6xl space-y-12 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="mx-auto w-full max-w-6xl space-y-10 px-4 py-10 sm:px-6 lg:px-8">
       <Hero />
 
-      {/* Stats */}
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      {/* Stats strip */}
+      <section className="animate-fade-up-delay-1 grid grid-cols-2 gap-3 md:grid-cols-4">
         {statMeta.map((s, i) => (
           <Link
             key={s.label}
             href={s.href}
-            className="card-shadow group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-center hover:border-[var(--brand)]"
+            className="card card-interactive group flex flex-col items-center p-4"
           >
-            <p className="text-3xl font-bold text-gradient">{counts[i]}</p>
-            <p className="mt-1 text-sm text-[var(--text-muted)] group-hover:text-[var(--brand)]">{s.label}</p>
+            <span className="text-[28px] font-bold leading-none text-gradient">{counts[i]}</span>
+            <span className="mt-1.5 text-[12px] font-medium text-[var(--text-muted)] group-hover:text-[var(--brand)]">{s.label}</span>
           </Link>
         ))}
       </section>
@@ -50,40 +50,34 @@ export default async function Home() {
       <LatestFeed laws={latestLaws} articles={latestArticles} />
 
       {/* Platform info */}
-      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
-        <div className="flex items-start gap-4">
-          <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-soft)] text-[var(--brand)] sm:flex">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-[var(--text-primary)]">
-              平台说明
-            </h2>
-            <div className="mt-3 grid gap-2 text-sm leading-relaxed text-[var(--text-muted)] sm:grid-cols-2">
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 text-[var(--brand)]">•</span>
-                <span>标准法规与文章由 <strong className="text-[var(--text-secondary)]">OpenClaw AI</strong> 联网搜索、整合并自动推送</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 text-[var(--brand)]">•</span>
-                <span>图片与PPT课件由 <strong className="text-[var(--text-secondary)]">NotebookLM</strong> 生成后上传</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 text-[var(--brand)]">•</span>
-                <span>标准法规支持 PDF 原文在线预览与下载</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 text-[var(--brand)]">•</span>
-                <span>GBZ 188 速查表按危害因素快速检索检查项目与禁忌证</span>
-              </div>
-            </div>
-            {totalCount > 0 && (
-              <p className="mt-4 text-xs text-[var(--text-subtle)]">
-                当前共收录 {totalCount} 条内容 · 所有变更均通过 Git 版本控制
-              </p>
-            )}
-          </div>
+      <section className="animate-fade-up-delay-3 card overflow-hidden p-0">
+        <div className="border-b border-[var(--border)] px-6 py-4">
+          <h2 className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--text-muted)]">
+            平台说明
+          </h2>
         </div>
+        <div className="grid gap-0 divide-y divide-[var(--border)] sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+          {[
+            { text: "标准法规与文章由 OpenClaw AI 联网搜索、整合并自动推送", highlight: "OpenClaw AI" },
+            { text: "图片与PPT课件由 NotebookLM 生成后上传", highlight: "NotebookLM" },
+            { text: "标准法规支持 PDF 原文在线预览与下载", highlight: "PDF" },
+            { text: "GBZ 188 速查表按危害因素快速检索检查项目与禁忌证", highlight: "GBZ 188" },
+          ].map((item) => (
+            <div key={item.highlight} className="flex items-start gap-3 px-6 py-4">
+              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--brand-soft)]">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="var(--brand)"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
+              </span>
+              <span className="text-[13px] leading-[1.6] text-[var(--text-muted)]">{item.text}</span>
+            </div>
+          ))}
+        </div>
+        {totalCount > 0 && (
+          <div className="border-t border-[var(--border)] px-6 py-3">
+            <p className="text-[11px] text-[var(--text-subtle)]">
+              当前共收录 {totalCount} 条内容 · 所有变更均通过 Git 版本控制
+            </p>
+          </div>
+        )}
       </section>
     </main>
   );

@@ -10,20 +10,23 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color:var(--surface)/0.88] backdrop-blur-xl">
+    <header className="glass sticky top-0 z-40 border-b border-[var(--border)]">
       <div className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="group flex items-center gap-3">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--brand)] font-semibold text-white shadow-sm shadow-[color:var(--brand-soft)]">
+          <Link href="/" className="group flex items-center gap-2.5">
+            <span
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[13px] font-bold text-white shadow-[var(--shadow-sm)]"
+              style={{ background: "var(--gradient-brand)" }}
+            >
               职
             </span>
             <div className="leading-tight">
-              <p className="text-sm font-medium text-[var(--text-primary)]">徐广军 · 职业病专业站</p>
-              <p className="text-xs text-[var(--text-muted)]">Occupational Health Intelligence Hub</p>
+              <p className="text-[13px] font-semibold text-[var(--text-primary)]">徐广军 · 职业病专业站</p>
+              <p className="text-[10px] text-[var(--text-subtle)]">Occupational Health Hub</p>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {mainNavigation.map((item) => {
               const isActive =
                 item.href === "/"
@@ -35,7 +38,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-medium transition",
+                    "rounded-lg px-3 py-1.5 text-[13px] font-medium",
                     isActive
                       ? "bg-[var(--brand-soft)] text-[var(--brand)]"
                       : "text-[var(--text-muted)] hover:bg-[var(--surface-alt)] hover:text-[var(--text-primary)]",
@@ -52,7 +55,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <nav className="mt-3 flex items-center gap-1 overflow-x-auto pb-1 scrollbar-hide md:hidden">
+        <nav className="mt-2.5 flex items-center gap-1 overflow-x-auto pb-1 scrollbar-hide md:hidden">
           {mainNavigation.map((item) => {
             const isActive =
               item.href === "/"
@@ -64,10 +67,10 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition",
+                  "whitespace-nowrap rounded-lg px-3 py-1.5 text-[12px] font-medium",
                   isActive
                     ? "bg-[var(--brand-soft)] text-[var(--brand)]"
-                    : "border border-[var(--border)] text-[var(--text-muted)]",
+                    : "text-[var(--text-muted)] hover:bg-[var(--surface-alt)]",
                 )}
               >
                 {item.label}
