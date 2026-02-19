@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { mainNavigation } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <header className="glass sticky top-0 z-40 border-b border-[var(--border)]">
@@ -51,6 +53,21 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {session ? (
+              <Link
+                href="/admin"
+                className="rounded-lg px-3 py-1.5 text-[12px] font-medium text-[var(--brand)] hover:bg-[var(--brand-soft)]"
+              >
+                管理后台
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-lg px-3 py-1.5 text-[12px] font-medium text-[var(--text-muted)] hover:bg-[var(--surface-alt)] hover:text-[var(--text-primary)]"
+              >
+                登录
+              </Link>
+            )}
             <ThemeToggle />
           </div>
         </div>
