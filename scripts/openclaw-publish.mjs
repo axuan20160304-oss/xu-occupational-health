@@ -166,9 +166,11 @@ async function main() {
     localAttachments.forEach((a) => console.log(`      - ${a.name} → ${a.url}`));
   }
 
-  // Git add both content file and any downloaded attachments
-  const filesToAdd = [filePath, ...localAttachments.map((a) => join(ROOT, "public", a.url))];
-  gitCommitAndPush(filesToAdd, data.title, module);
+  // Git add both content file and any locally downloaded attachments
+  const localFiles = localAttachments
+    .filter((a) => a.url.startsWith("/uploads/"))
+    .map((a) => join(ROOT, "public", a.url));
+  gitCommitAndPush([filePath, ...localFiles], data.title, module);
 }
 
 async function downloadFile(url, destPath) {
