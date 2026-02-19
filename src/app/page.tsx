@@ -1,65 +1,57 @@
-import Image from "next/image";
+import { Hero } from "@/components/home/hero";
+import { QuickAccessGrid } from "@/components/home/quick-access-grid";
+import { LatestFeed } from "@/components/home/latest-feed";
+import { getContentList } from "@/lib/content";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const allLaws = await getContentList("laws");
+  const allArticles = await getContentList("articles");
+
+  const latestLaws = allLaws.slice(0, 4);
+  const latestArticles = allArticles.slice(0, 4);
+
+  const stats = [
+    { label: "法规条目", value: allLaws.length },
+    { label: "专业文章", value: allArticles.length },
+    { label: "API端点", value: 6 },
+    { label: "支持媒体类型", value: 5 },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="mx-auto w-full max-w-6xl space-y-14 px-4 py-10 sm:px-6 lg:px-8">
+      <Hero />
+
+      {/* Stats */}
+      <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {stats.map((s) => (
+          <div
+            key={s.label}
+            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-center"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <p className="text-3xl font-bold text-[var(--brand)]">{s.value}</p>
+            <p className="mt-1 text-sm text-[var(--text-muted)]">{s.label}</p>
+          </div>
+        ))}
+      </section>
+
+      <QuickAccessGrid />
+      <LatestFeed laws={latestLaws} articles={latestArticles} />
+
+      {/* Maintenance info */}
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-alt)] p-6 text-sm leading-7 text-[var(--text-muted)]">
+        <h2 className="mb-3 text-base font-semibold text-[var(--text-primary)]">
+          数据维护说明
+        </h2>
+        <ul className="list-inside space-y-1">
+          <li>• 法规与文章以 MDX 格式存储，支持 Markdown 与自定义组件</li>
+          <li>• 支持 POST /api/smart-push 智能识别内容类型并自动分发</li>
+          <li>• 支持 POST /api/webhook/openclaw 对接 OpenClaw Telegram 机器人</li>
+          <li>• GBZ 标准数据通过 JSON 结构化存储，支持按危害因素检索</li>
+          <li>• 所有内容变更均通过 Git 版本控制，确保可追溯</li>
+        </ul>
+      </section>
+    </main>
   );
 }
