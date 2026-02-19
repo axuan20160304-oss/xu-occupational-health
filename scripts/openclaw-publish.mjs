@@ -355,6 +355,22 @@ function gitCommitAndPush(filePaths, title, module) {
     console.log(`   📦 Git commit 成功`);
   } catch (e) {
     console.log(`   ⚠️ Git: ${e.message.split("\n")[0]}`);
+    return;
+  }
+  // Auto push to remote
+  try {
+    execSync(`git push origin main`, { cwd: ROOT, stdio: "pipe" });
+    console.log(`   🚀 Git push 成功`);
+  } catch (e) {
+    console.log(`   ⚠️ Git push: ${e.message.split("\n")[0]}`);
+  }
+  // Auto deploy to Vercel
+  try {
+    console.log(`   🌐 正在部署到 Vercel...`);
+    execSync(`vercel --prod --yes`, { cwd: ROOT, stdio: "pipe", timeout: 180000 });
+    console.log(`   ✅ Vercel 部署成功`);
+  } catch (e) {
+    console.log(`   ⚠️ Vercel 部署: ${e.message.split("\n")[0]}`);
   }
 }
 
