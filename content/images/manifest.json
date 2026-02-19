@@ -5,10 +5,28 @@
       "title": "噪声性听力损失机制示意图",
       "description": "展示噪声对内耳毛细胞的损伤机制，包括外毛细胞与内毛细胞的结构变化。",
       "filename": "noise-hearing-diagram.png",
-      "tags": ["噪声聋", "听力损失", "机制图"],
+      "tags": [
+        "噪声聋",
+        "听力损失",
+        "机制图"
+      ],
+      "date": "2026-02-19",
+      "source": "NotebookLM"
+    },
+    {
+      "id": "post-900225",
+      "title": "职业性噪声聋听力损失分级示意图",
+      "description": "根据GBZ 49-2014标准，展示噪声聋听力损失的分级标准与对应纯音测听结果。",
+      "filename": "post-830542.png",
+      "tags": [
+        "噪声聋",
+        "听力分级",
+        "GBZ49",
+        "纯音测听"
+      ],
       "date": "2026-02-19",
       "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-19T00:00:00.000Z"
+  "updatedAt": "2026-02-19T11:01:40.225Z"
 }
