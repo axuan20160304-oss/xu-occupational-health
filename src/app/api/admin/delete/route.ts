@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const apiUrl = `https://api.github.com/repos/${repo}/contents/site/content/${kind}/${slug}.mdx`;
+  const apiUrl = `https://api.github.com/repos/${repo}/contents/content/${kind}/${slug}.mdx`;
 
   try {
     const checkRes = await fetch(apiUrl, {

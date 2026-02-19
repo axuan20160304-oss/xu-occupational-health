@@ -87,7 +87,7 @@ async function writeViaGitHub(
     throw new Error("GITHUB_TOKEN 未配置，无法通过 GitHub API 写入文件。");
   }
 
-  const apiUrl = `https://api.github.com/repos/${repo}/contents/site/${filePath}`;
+  const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
   const contentBase64 = Buffer.from(content, "utf8").toString("base64");
 
   // Check if file already exists (to get its sha for update)
