@@ -1,21 +1,6 @@
 {
   "items": [
     {
-      "id": "post-821288",
-      "title": "职业性噪声聋防护培训课件",
-      "description": "5页专业培训课件，涵盖噪声基本概念、健康影响、GBZ 49-2014诊断要点、接触限值、防护措施、健康监护要求",
-      "filename": "noise-hearing-loss-training.pdf",
-      "tags": [
-        "噪声聋",
-        "培训",
-        "GBZ49",
-        "防护",
-        "听力保护"
-      ],
-      "date": "2026-02-20",
-      "source": "AI生成"
-    },
-    {
       "id": "occupational-noise-protection-guide-notebooklm-059583",
       "title": "Occupational Noise Protection Guide（NotebookLM课件）",
       "description": "NotebookLM自动生成的职业性噪声防护培训课件，包含噪声危害、听力保护、防护设备、法规要求等完整内容，共多页PDF幻灯片",
@@ -46,5 +31,5 @@
       "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T09:12:50.279Z"
+  "updatedAt": "2026-02-20T10:42:13.091Z"
 }
