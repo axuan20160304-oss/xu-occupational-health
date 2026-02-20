@@ -3,7 +3,7 @@
  * OpenClaw 智能内容推送脚本
  *
  * 支持自然语言指令，自动识别内容类型并写入对应 MDX 文件，
- * 然后 git commit + push 触发 Netlify 自动部署。
+ * 然后 git commit + push 触发 Vercel 自动部署。
  *
  * 用法：
  *   # 交互模式（推荐）
