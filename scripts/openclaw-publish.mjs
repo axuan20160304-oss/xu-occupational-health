@@ -245,7 +245,7 @@ async function main() {
     const label = module === "images" ? "图片" : "PPT";
     console.log(`✅ 已添加${label}：${data.title}`);
     console.log(`   文件：${localFilename}`);
-    console.log(`   链接：https://xu-occupational-health.netlify.app/${module}`);
+    console.log(`   链接：https://site-nine-chi-41.vercel.app/${module}`);
 
     gitCommitAndPush(filesToGitAdd, data.title, module);
     return;
@@ -275,7 +275,7 @@ async function main() {
   console.log(`✅ 已写入${moduleLabels[module]}：${data.title}`);
   console.log(`   文件：${filePath}`);
   console.log(`   slug：${slug}`);
-  console.log(`   链接：https://xu-occupational-health.netlify.app/${module}/${slug}`);
+  console.log(`   链接：https://site-nine-chi-41.vercel.app/${module}/${slug}`);
   if (localAttachments.length > 0) {
     console.log(`   📎 附件：${localAttachments.length} 个`);
     localAttachments.forEach((a) => console.log(`      - ${a.name} → ${a.url}`));
