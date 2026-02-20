@@ -52,9 +52,15 @@ function findStandard(slug: string): StandardEntry | null {
 
 function findRelatedStandards(current: StandardEntry): StandardEntry[] {
   const { standards } = loadCatalog();
-  const codeBase = current.code.replace(/-\d{4}$/, "");
+  // Extract the standard number without year, e.g. "GBZ 1" from "GBZ 1-2010"
+  // or "GBZ 2.1" from "GBZ 2.1-2019", or "GBZ/T 300.1" from "GBZ/T 300.1-2017"
+  const codeBase = current.code.replace(/-\d{4}$/, "").trim();
   return standards
-    .filter((s) => s.id !== current.id && s.code.startsWith(codeBase))
+    .filter((s) => {
+      if (s.id === current.id) return false;
+      const otherBase = s.code.replace(/-\d{4}$/, "").trim();
+      return otherBase === codeBase;
+    })
     .sort((a, b) => b.year - a.year)
     .slice(0, 5);
 }
