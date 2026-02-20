@@ -44,7 +44,22 @@
       ],
       "date": "2026-02-20",
       "source": "OpenClaw"
+    },
+    {
+      "id": "notebooklm-133945",
+      "title": "尘肺病职业健康培训课件（NotebookLM）",
+      "description": "NotebookLM自动生成的尘肺病职业健康培训课件，涵盖粉尘防治、健康监护、诊断标准、防护措施等专业内容",
+      "filename": "notebooklm-pneumoconiosis-training.pdf",
+      "tags": [
+        "尘肺",
+        "培训",
+        "粉尘",
+        "NotebookLM",
+        "GBZ70"
+      ],
+      "date": "2026-02-20",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T05:08:35.385Z"
+  "updatedAt": "2026-02-20T05:25:33.945Z"
 }
