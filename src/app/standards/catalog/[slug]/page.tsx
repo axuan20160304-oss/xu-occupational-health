@@ -114,7 +114,7 @@ export default async function CatalogDetailPage({ params }: CatalogDetailPagePro
   const related = findRelatedStandards(std);
   const pdfMap = loadPdfAvailability();
   const docMap = loadDocAvailability();
-  const pdfBaseUrl = process.env.PDF_BASE_URL || "https://directories-utility-shelf-soviet.trycloudflare.com";
+  const pdfBaseUrl = process.env.PDF_BASE_URL || "https://philosophy-lake-cutting-bio.trycloudflare.com";
 
   const hasPdf = !!pdfMap[std.slug];
   const hasDoc = !!docMap[std.slug];
