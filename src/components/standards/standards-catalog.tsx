@@ -18,9 +18,11 @@ export interface StandardEntry {
 interface StandardsCatalogProps {
   standards: StandardEntry[];
   categories: string[];
+  pdfMap?: Record<string, string>;
+  pdfBaseUrl?: string;
 }
 
-export function StandardsCatalog({ standards, categories }: StandardsCatalogProps) {
+export function StandardsCatalog({ standards, categories, pdfMap = {}, pdfBaseUrl = "" }: StandardsCatalogProps) {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [statusFilter, setStatusFilter] = useState<"全部" | "现行" | "废止">("全部");
@@ -168,18 +170,33 @@ export function StandardsCatalog({ standards, categories }: StandardsCatalogProp
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-center">
-                    <a
-                      href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title + " filetype:pdf")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-lg bg-[var(--brand)]/10 px-2.5 py-1 text-xs font-medium text-[var(--brand)] transition hover:bg-[var(--brand)]/20"
-                      title={`搜索 ${s.code} PDF`}
-                    >
-                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      搜索PDF
-                    </a>
+                    {pdfMap[s.slug] ? (
+                      <a
+                        href={`${pdfBaseUrl}/${encodeURIComponent(pdfMap[s.slug])}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600 transition hover:bg-emerald-500/20"
+                        title={`下载 ${s.code} PDF`}
+                      >
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        下载PDF
+                      </a>
+                    ) : (
+                      <a
+                        href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title + " filetype:pdf")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-lg bg-[var(--brand)]/10 px-2.5 py-1 text-xs font-medium text-[var(--brand)] transition hover:bg-[var(--brand)]/20"
+                        title={`搜索 ${s.code} PDF`}
+                      >
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        搜索PDF
+                      </a>
+                    )}
                   </td>
                 </tr>
               ))}
