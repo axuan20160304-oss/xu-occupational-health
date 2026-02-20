@@ -4,8 +4,20 @@ import { QuickAccessGrid } from "@/components/home/quick-access-grid";
 import { LatestFeed } from "@/components/home/latest-feed";
 import { getContentList } from "@/lib/content";
 import { getImageList, getPptList } from "@/lib/media-store";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const dynamic = "force-dynamic";
+
+function getStandardsCatalogCount(): number {
+  try {
+    const file = join(process.cwd(), "content", "standards", "standards-catalog.json");
+    const data = JSON.parse(readFileSync(file, "utf8"));
+    return data.stats?.total || data.standards?.length || 0;
+  } catch {
+    return 0;
+  }
+}
 
 const statMeta = [
   { label: "标准法规", href: "/standards" },
@@ -25,7 +37,8 @@ export default async function Home() {
   const latestLaws = allLaws.slice(0, 4);
   const latestArticles = allArticles.slice(0, 4);
 
-  const counts = [allLaws.length, allArticles.length, allImages.length, allPpts.length];
+  const standardsCount = getStandardsCatalogCount();
+  const counts = [standardsCount || allLaws.length, allArticles.length, allImages.length, allPpts.length];
   const totalCount = counts.reduce((a, b) => a + b, 0);
 
   return (

@@ -146,9 +146,7 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
                 <tr key={s.id} className="bg-[var(--surface)] transition hover:bg-[var(--surface-alt)]">
                   <td className="whitespace-nowrap px-4 py-3 font-mono text-xs font-semibold">
                     <a
-                      href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`/standards/catalog/${s.slug}`}
                       className="text-[var(--brand)] hover:underline"
                       title={`查看 ${s.code} 详情`}
                     >
@@ -157,9 +155,7 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
                   </td>
                   <td className="px-4 py-3 text-[var(--text-primary)]">
                     <a
-                      href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`/standards/catalog/${s.slug}`}
                       className="hover:text-[var(--brand)] hover:underline transition"
                     >
                       {s.title}
