@@ -29,7 +29,21 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
+    },
+    {
+      "id": "notebooklm-212095",
+      "title": "高温中暑科学防暑指南（NotebookLM演示文稿）",
+      "description": "NotebookLM自动生成的15页精美演示文稿，涵盖中暑分级、急救四步法、中医穴位按摩、特殊人群防护等",
+      "filename": "notebooklm-212067.pdf",
+      "tags": [
+        "中暑",
+        "防暑",
+        "演示文稿",
+        "NotebookLM"
+      ],
+      "date": "2026-02-20",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T10:42:13.091Z"
+  "updatedAt": "2026-02-20T19:53:32.095Z"
 }
