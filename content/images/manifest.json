@@ -13,7 +13,21 @@
       ],
       "date": "2026-02-20",
       "source": "AI生成"
+    },
+    {
+      "id": "post-968099",
+      "title": "职业性噪声聋防治技术指南（信息图）",
+      "description": "NotebookLM自动生成的职业性噪声聋防治技术信息图，涵盖发病机制、诊断标准、防护措施等核心内容",
+      "filename": "notebooklm-noise-deafness-infographic.png",
+      "tags": [
+        "噪声聋",
+        "信息图",
+        "NotebookLM",
+        "防治指南"
+      ],
+      "date": "2026-02-20",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T03:39:10.068Z"
+  "updatedAt": "2026-02-20T04:49:28.100Z"
 }
