@@ -1,12 +1,25 @@
 import { GbzExplorer } from "@/components/standards/gbz-explorer";
 import { StandardsTabs } from "@/components/standards/standards-tabs";
+import { StandardsCatalog } from "@/components/standards/standards-catalog";
 import { ContentCard } from "@/components/content/content-card";
 import { SectionTitle } from "@/components/ui/section-title";
 import { gbzHazards } from "@/data/gbz188";
 import { loadStandardsSnapshot } from "@/lib/standards-store";
 import { getContentList } from "@/lib/content";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const dynamic = "force-dynamic";
+
+function loadStandardsCatalog() {
+  try {
+    const file = join(process.cwd(), "content", "standards", "standards-catalog.json");
+    const data = JSON.parse(readFileSync(file, "utf8"));
+    return data;
+  } catch {
+    return { standards: [], categories: [], stats: { total: 0 } };
+  }
+}
 
 export default async function StandardsPage() {
   const [snapshot, laws] = await Promise.all([
@@ -14,16 +27,23 @@ export default async function StandardsPage() {
     getContentList("laws"),
   ]);
   const hazards = snapshot?.hazards ?? gbzHazards;
+  const catalog = loadStandardsCatalog();
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <SectionTitle
         eyebrow="Standards & Regulations"
         title="GBZ标准与法规"
-        description="职业健康标准、法律法规全文，支持PDF在线预览与下载。GBZ 188速查表按危害因素快速检索。"
+        description={`收录 ${catalog.stats?.total || 0} 项职业卫生标准（GBZ/GBZ-T/WS/GB/AQ），支持搜索、分类筛选与PDF下载。`}
       />
 
       <StandardsTabs
+        catalogContent={
+          <StandardsCatalog
+            standards={catalog.standards}
+            categories={catalog.categories}
+          />
+        }
         docsContent={
           <div className="space-y-4">
             <p className="text-sm text-[var(--text-muted)]">

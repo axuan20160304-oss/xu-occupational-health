@@ -6,17 +6,19 @@ import { cn } from "@/lib/utils";
 interface StandardsTabsProps {
   docsContent: ReactNode;
   gbzContent: ReactNode;
+  catalogContent?: ReactNode;
 }
 
 const tabs = [
+  { key: "catalog", label: "标准目录" },
   { key: "docs", label: "标准法规文档" },
   { key: "gbz", label: "GBZ 188 速查" },
 ] as const;
 
 type TabKey = (typeof tabs)[number]["key"];
 
-export function StandardsTabs({ docsContent, gbzContent }: StandardsTabsProps) {
-  const [active, setActive] = useState<TabKey>("docs");
+export function StandardsTabs({ docsContent, gbzContent, catalogContent }: StandardsTabsProps) {
+  const [active, setActive] = useState<TabKey>("catalog");
 
   return (
     <div className="space-y-6">
@@ -37,7 +39,9 @@ export function StandardsTabs({ docsContent, gbzContent }: StandardsTabsProps) {
         ))}
       </div>
 
-      {active === "docs" ? docsContent : gbzContent}
+      {active === "catalog" && catalogContent}
+      {active === "docs" && docsContent}
+      {active === "gbz" && gbzContent}
     </div>
   );
 }
