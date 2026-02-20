@@ -195,7 +195,7 @@ function gitCommitAndPush(filePath, title, module) {
     console.log(`   📦 Git commit: ${commitMsg}`);
 
     execSync("git push", { cwd: ROOT, stdio: "pipe" });
-    console.log("   🚀 Git push 成功！Netlify 将自动重新部署。");
+    console.log("   🚀 Git push 成功！Vercel 将自动重新部署。");
     return true;
   } catch (err) {
     console.log(`   ⚠️  Git 操作失败: ${err.message}`);

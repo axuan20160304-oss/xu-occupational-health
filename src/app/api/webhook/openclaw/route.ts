@@ -12,7 +12,7 @@ export const runtime = "nodejs";
  * 1. JSON 格式 — 直接发送结构化数据
  * 2. 自然语言指令 — 如 "更新法规：xxx" 或 "添加文章：xxx"
  *
- * Webhook URL: https://your-site.netlify.app/api/webhook/openclaw?apiKey=<key>
+ * Webhook URL: https://site-nine-chi-41.vercel.app/api/webhook/openclaw?apiKey=<key>
  */
 
 interface TelegramMessage {
@@ -200,7 +200,7 @@ export async function GET() {
     description: "接收 OpenClaw Telegram 机器人消息，自动添加内容到网站",
     setup: {
       step1: "在 Telegram 中配置 OpenClaw 机器人的 Webhook URL",
-      step2: "设置 URL 为: https://your-site.netlify.app/api/webhook/openclaw?apiKey=<your-key>",
+      step2: "设置 URL 为: https://site-nine-chi-41.vercel.app/api/webhook/openclaw?apiKey=<your-key>",
       step3: "发送内容给机器人，格式如下",
     },
     formats: {
