@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尘肺病职业健康培训</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 60px 80px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3.5rem; color: #fff; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        h2 { font-size: 2.8rem; color: #667eea; margin-bottom: 40px; }
+        p, li { font-size: 1.8rem; line-height: 1.8; color: #555; }
+        table { border-collapse: collapse; width: 100%; max-width: 900px; margin: 30px 0; }
+        th, td { border: 2px solid #ddd; padding: 15px 20px; text-align: left; font-size: 1.4rem; }
+        th { background: #667eea; color: white; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .content-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-width: 1000px; }
+        .highlight { color: #667eea; font-weight: bold; }
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+        .nav button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #667eea;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .nav button:hover { background: #667eea; color: white; }
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #fff;
+            transition: width 0.3s;
+        }
+        .title-slide {
+            text-align: center;
+        }
+        .title-slide h1 { font-size: 4rem; }
+        .check-list { list-style: none; }
+        .check-list li { 
+            padding: 15px 0; 
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .check-list li::before { content: "✓"; color: #667eea; margin-right: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+
+    <!-- Slide 1 -->
+    <div class="slide active title-slide">
+        <div class="content-box">
+            <h1>🫁 尘肺病职业健康培训</h1>
+            <p style="color: #666; font-size: 1.5rem; margin-top: 20px;">预防为主 防治结合</p>
+        </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>什么是尘肺？</h2>
+            <p>尘肺是指在职业活动中，长期吸入<span class="highlight">生产性矿物性粉尘</span>并在肺内潴留而引起的以<span class="highlight">肺组织弥漫性纤维化</span>为主的全身性疾病。</p>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>主要类型</h2>
+            <table>
+                <tr><th>类型</th><th>粉尘来源</th></tr>
+                <tr><td>矽肺</td><td>二氧化硅</td></tr>
+                <tr><td>煤工尘肺</td><td>煤矿粉尘</td></tr>
+                <tr><td>石棉肺</td><td>石棉纤维</td></tr>
+                <tr><td>水泥尘肺</td><td>水泥粉尘</td></tr>
+                <tr><td>铸工尘肺</td><td>铸造粉尘</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>症状表现</h2>
+            <ul class="check-list">
+                <li><strong>咳嗽</strong> - 持续性干咳或咳痰</li>
+                <li><strong>咳痰</strong> - 灰白色黏痰</li>
+                <li><strong>胸闷</strong> - 呼吸不畅</li>
+                <li><strong>气短</strong> - 活动后加重</li>
+                <li><strong>胸痛</strong> - 隐痛或钝痛</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>诊断标准 GBZ 70-2015</h2>
+            <table>
+                <tr><th>分期</th><th>X射线表现</th></tr>
+                <tr><td>壹期</td><td>密集度1级，≥2个肺区</td></tr>
+                <tr><td>贰期</td><td>密集度2级，≥4个肺区</td></tr>
+                <tr><td>叁期</td><td>密集度3级，或有大阴影</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>职业健康检查</h2>
+            <p><strong>上岗前禁忌症：</strong></p>
+            <ul class="check-list">
+                <li>活动性肺结核</li>
+                <li>慢性阻塞性肺疾病</li>
+                <li>慢性肺间质疾病</li>
+                <li>肺切除术后</li>
+            </ul>
+            <p style="margin-top: 30px;"><strong>在岗检查周期：</strong> 矽尘、煤尘、石棉每年1次</p>
+        </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>预防措施</h2>
+            <p><strong>工程技术：</strong></p>
+            <ul class="check-list">
+                <li>湿式作业</li>
+                <li>通风除尘</li>
+                <li>密闭隔离</li>
+                <li>工艺改革</li>
+            </ul>
+            <p style="margin-top: 30px;"><strong>个人防护：</strong></p>
+            <p>防尘口罩、防护服、防护眼镜</p>
+        </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>接触限值</h2>
+            <table>
+                <tr><th>粉尘种类</th><th>PC-TWA</th></tr>
+                <tr><td>总粉尘</td><td>4 mg/m³</td></tr>
+                <tr><td>游离SiO₂≥10%</td><td>1 mg/m³</td></tr>
+                <tr><td>煤尘</td><td>4 mg/m³</td></tr>
+                <tr><td>水泥</td><td>4 mg/m³</td></tr>
+                <tr><td>石棉</td><td>0.8 f/mL</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>治疗原则</h2>
+            <ol style="font-size: 1.6rem; line-height: 2;">
+                <li>脱离粉尘作业</li>
+                <li>对症治疗</li>
+                <li>并发症治疗</li>
+                <li>康复治疗</li>
+                <li>定期复查</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="slide">
+        <div class="content-box">
+            <h2>劳动者权利</h2>
+            <ul class="check-list">
+                <li>✅ 知情权 - 了解职业危害</li>
+                <li>✅ 培训权 - 获得防护培训</li>
+                <li>✅ 防护权 - 获得防护用品</li>
+                <li>✅ 检查权 - 职业健康检查</li>
+                <li>✅ 赔偿权 - 职业病待遇</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 11 -->
+    <div class="slide title-slide">
+        <div class="content-box">
+            <h1>谢谢！</h1>
+            <p style="color: #667eea; font-size: 2rem; margin-top: 20px;">预防为主 防治结合</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prevSlide()">◀ 上一页</button>
+        <button onclick="nextSlide()">下一页 ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            progress.style.width = ((currentSlide + 1) / slides.length * 100) + '%';
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        showSlide(0);
+    </script>
+</body>
+</html>
