@@ -1,20 +1,6 @@
 {
   "items": [
     {
-      "id": "post-750068",
-      "title": "职业病危害因素识别与防护要点",
-      "description": "职业健康核心知识图谱，涵盖化学因素、物理因素、生物因素、健康监护、法律保障、三级预防六大板块",
-      "filename": "occupational-hazard-infographic.pdf",
-      "tags": [
-        "职业病",
-        "危害因素",
-        "防护",
-        "知识图谱"
-      ],
-      "date": "2026-02-20",
-      "source": "AI生成"
-    },
-    {
       "id": "post-968099",
       "title": "职业性噪声聋防治技术指南（信息图）",
       "description": "NotebookLM自动生成的职业性噪声聋防治技术信息图，涵盖发病机制、诊断标准、防护措施等核心内容",
@@ -44,5 +30,5 @@
       "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T05:23:40.642Z"
+  "updatedAt": "2026-02-20T09:12:34.710Z"
 }
