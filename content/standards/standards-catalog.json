@@ -10018,6 +10018,158 @@
       "status": "现行",
       "category": "技术规范与导则",
       "slug": "ws-t19-1996"
+    },
+    {
+      "code": "GBZ T 189.3-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-189-3-2018"
+    },
+    {
+      "code": "GBZ T 300.100-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-300-100-2018"
+    },
+    {
+      "code": "GBZ T 300.106-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-300-106-2018"
+    },
+    {
+      "code": "GBZ T 300.116-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-300-116-2018"
+    },
+    {
+      "code": "GBZ T 300.128-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-300-128-2018"
+    },
+    {
+      "code": "GBZ T 300.96-2018",
+      "name": "",
+      "year": "2018",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gbz-t-300-96-2018"
+    },
+    {
+      "code": "GBZ 160.36-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-36-2004"
+    },
+    {
+      "code": "GBZ 160.37-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-37-2004"
+    },
+    {
+      "code": "GBZ 160.43-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-43-2004"
+    },
+    {
+      "code": "GBZ 160.44-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-44-2004"
+    },
+    {
+      "code": "GBZ 160.49-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-49-2004"
+    },
+    {
+      "code": "GBZ 160.52-2007",
+      "name": "",
+      "year": "2007",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-52-2007"
+    },
+    {
+      "code": "GBZ 160.61-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-61-2004"
+    },
+    {
+      "code": "GBZ 160.73-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-73-2004"
+    },
+    {
+      "code": "GBZ 160.75-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-75-2004"
+    },
+    {
+      "code": "GBZ 160.77-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-77-2004"
+    },
+    {
+      "code": "GBZ 160.78-2007",
+      "name": "",
+      "year": "2007",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-78-2007"
+    },
+    {
+      "code": "GBZ 160.79-2004",
+      "name": "",
+      "year": "2004",
+      "status": "现行",
+      "category": "工作场所检测方法",
+      "slug": "gbz160-79-2004"
+    },
+    {
+      "code": "WS/T 455-2014",
+      "name": "卫生检测与评价名词术语",
+      "year": "2014",
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "wst455-2014卫生检测与评价名词术语"
     }
   ],
   "categories": [
@@ -10033,7 +10185,7 @@
     "职业健康监护"
   ],
   "stats": {
-    "total": 817,
+    "total": 965,
     "current": 670,
     "superseded": 147,
     "byCategory": {
