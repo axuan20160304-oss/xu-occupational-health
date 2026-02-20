@@ -30,6 +30,15 @@ function loadPdfAvailability(): Record<string, string> {
   }
 }
 
+function loadDocAvailability(): Record<string, string> {
+  try {
+    const file = join(process.cwd(), "content", "standards", "doc-availability.json");
+    return JSON.parse(readFileSync(file, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
 export default async function StandardsPage() {
   const [snapshot, laws] = await Promise.all([
     loadStandardsSnapshot(),
@@ -38,14 +47,16 @@ export default async function StandardsPage() {
   const hazards = snapshot?.hazards ?? gbzHazards;
   const catalog = loadStandardsCatalog();
   const pdfMap = loadPdfAvailability();
+  const docMap = loadDocAvailability();
   const pdfBaseUrl = process.env.PDF_BASE_URL || "https://directories-utility-shelf-soviet.trycloudflare.com";
+  const downloadCount = new Set([...Object.keys(pdfMap), ...Object.keys(docMap)]).size;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <SectionTitle
         eyebrow="Standards & Regulations"
         title="GBZ标准与法规"
-        description={`收录 ${catalog.stats?.total || 0} 项职业卫生标准（GBZ/GBZ-T/WS/GB/AQ），支持搜索、分类筛选与PDF下载。其中 ${Object.keys(pdfMap).length} 项提供直接下载。`}
+        description={`收录 ${catalog.stats?.total || 0} 项职业卫生标准（GBZ/GBZ-T/WS/GB/AQ），支持搜索、分类筛选与下载。其中 ${downloadCount} 项提供PDF/Word直接下载。`}
       />
 
       <StandardsTabs
@@ -54,6 +65,7 @@ export default async function StandardsPage() {
             standards={catalog.standards}
             categories={catalog.categories}
             pdfMap={pdfMap}
+            docMap={docMap}
             pdfBaseUrl={pdfBaseUrl}
           />
         }

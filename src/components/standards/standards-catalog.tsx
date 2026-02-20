@@ -19,10 +19,11 @@ interface StandardsCatalogProps {
   standards: StandardEntry[];
   categories: string[];
   pdfMap?: Record<string, string>;
+  docMap?: Record<string, string>;
   pdfBaseUrl?: string;
 }
 
-export function StandardsCatalog({ standards, categories, pdfMap = {}, pdfBaseUrl = "" }: StandardsCatalogProps) {
+export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = {}, pdfBaseUrl = "" }: StandardsCatalogProps) {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [statusFilter, setStatusFilter] = useState<"全部" | "现行" | "废止">("全部");
@@ -53,7 +54,7 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, pdfBaseUr
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   // Reset page when filters change
-  const handleSearch = (val: string) => { setSearch(val); setPage(1); };
+  const handleSearch = (val: string) => { setSearch(val); setPage(1); if (val.trim()) setSelectedCategory("全部"); };
   const handleCategory = (val: string) => { setSelectedCategory(val); setPage(1); };
   const handleStatus = (val: "全部" | "现行" | "废止") => { setStatusFilter(val); setPage(1); };
 
@@ -143,11 +144,26 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, pdfBaseUr
             <tbody className="divide-y divide-[var(--border)]">
               {paged.map((s) => (
                 <tr key={s.id} className="bg-[var(--surface)] transition hover:bg-[var(--surface-alt)]">
-                  <td className="whitespace-nowrap px-4 py-3 font-mono text-xs font-semibold text-[var(--brand)]">
-                    {s.code}
+                  <td className="whitespace-nowrap px-4 py-3 font-mono text-xs font-semibold">
+                    <a
+                      href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--brand)] hover:underline"
+                      title={`查看 ${s.code} 详情`}
+                    >
+                      {s.code}
+                    </a>
                   </td>
                   <td className="px-4 py-3 text-[var(--text-primary)]">
-                    {s.title}
+                    <a
+                      href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[var(--brand)] hover:underline transition"
+                    >
+                      {s.title}
+                    </a>
                   </td>
                   <td className="hidden whitespace-nowrap px-4 py-3 text-[var(--text-muted)] sm:table-cell">
                     {s.year}
@@ -170,33 +186,50 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, pdfBaseUr
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-center">
-                    {pdfMap[s.slug] ? (
-                      <a
-                        href={`${pdfBaseUrl}/${encodeURIComponent(pdfMap[s.slug])}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600 transition hover:bg-emerald-500/20"
-                        title={`下载 ${s.code} PDF`}
-                      >
-                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        下载PDF
-                      </a>
-                    ) : (
-                      <a
-                        href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title + " filetype:pdf")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg bg-[var(--brand)]/10 px-2.5 py-1 text-xs font-medium text-[var(--brand)] transition hover:bg-[var(--brand)]/20"
-                        title={`搜索 ${s.code} PDF`}
-                      >
-                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        搜索PDF
-                      </a>
-                    )}
+                    <div className="flex items-center justify-center gap-1.5">
+                      {pdfMap[s.slug] && (
+                        <a
+                          href={`${pdfBaseUrl}/${encodeURIComponent(pdfMap[s.slug])}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg bg-red-500/10 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-500/20"
+                          title={`下载 ${s.code} PDF`}
+                        >
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          PDF
+                        </a>
+                      )}
+                      {docMap[s.slug] && (
+                        <a
+                          href={`${pdfBaseUrl}/${encodeURIComponent(docMap[s.slug])}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-500/20"
+                          title={`下载 ${s.code} Word`}
+                        >
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          Word
+                        </a>
+                      )}
+                      {!pdfMap[s.slug] && !docMap[s.slug] && (
+                        <a
+                          href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title + " filetype:pdf")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg bg-[var(--brand)]/10 px-2 py-1 text-xs font-medium text-[var(--brand)] transition hover:bg-[var(--brand)]/20"
+                          title={`搜索 ${s.code} PDF`}
+                        >
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          搜索
+                        </a>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
