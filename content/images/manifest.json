@@ -1,4 +1,19 @@
 {
-  "items": [],
-  "updatedAt": "2026-02-20T00:00:00.000Z"
+  "items": [
+    {
+      "id": "post-750068",
+      "title": "职业病危害因素识别与防护要点",
+      "description": "职业健康核心知识图谱，涵盖化学因素、物理因素、生物因素、健康监护、法律保障、三级预防六大板块",
+      "filename": "occupational-hazard-infographic.pdf",
+      "tags": [
+        "职业病",
+        "危害因素",
+        "防护",
+        "知识图谱"
+      ],
+      "date": "2026-02-20",
+      "source": "AI生成"
+    }
+  ],
+  "updatedAt": "2026-02-20T03:39:10.068Z"
 }
