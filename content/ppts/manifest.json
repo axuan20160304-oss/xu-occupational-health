@@ -29,7 +29,22 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-115385",
+      "title": "尘肺病职业健康培训课件",
+      "description": "11页专业培训课件，涵盖尘肺定义、主要类型、症状表现、GBZ 70-2015诊断标准、职业健康检查、预防措施、接触限值、治疗原则、劳动者权利",
+      "filename": "pneumoconiosis-training.pdf",
+      "tags": [
+        "尘肺",
+        "培训",
+        "GBZ70",
+        "粉尘",
+        "防护"
+      ],
+      "date": "2026-02-20",
+      "source": "OpenClaw"
     }
   ],
-  "updatedAt": "2026-02-20T04:50:59.583Z"
+  "updatedAt": "2026-02-20T05:08:35.385Z"
 }
