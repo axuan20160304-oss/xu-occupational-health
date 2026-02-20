@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const TUNNEL_URL = process.env.PDF_TUNNEL_URL || "https://brooks-rev-ryan-visited.trycloudflare.com";
+const TUNNEL_URL = process.env.PDF_TUNNEL_URL || "https://5744a7de.r11.vip.cpolar.cn";
 
 const nextConfig: NextConfig = {
   typescript: {
