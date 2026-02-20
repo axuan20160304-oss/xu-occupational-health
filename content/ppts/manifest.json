@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "post-821288",
+      "title": "职业性噪声聋防护培训课件",
+      "description": "5页专业培训课件，涵盖噪声基本概念、健康影响、GBZ 49-2014诊断要点、接触限值、防护措施、健康监护要求",
+      "filename": "noise-hearing-loss-training.pdf",
+      "tags": [
+        "噪声聋",
+        "培训",
+        "GBZ49",
+        "防护",
+        "听力保护"
+      ],
+      "date": "2026-02-20",
+      "source": "AI生成"
+    },
+    {
       "id": "occupational-noise-protection-guide-notebooklm-059583",
       "title": "Occupational Noise Protection Guide（NotebookLM课件）",
       "description": "NotebookLM自动生成的职业性噪声防护培训课件，包含噪声危害、听力保护、防护设备、法规要求等完整内容，共多页PDF幻灯片",
@@ -14,21 +29,6 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
-    },
-    {
-      "id": "post-115385",
-      "title": "尘肺病职业健康培训课件",
-      "description": "11页专业培训课件，涵盖尘肺定义、主要类型、症状表现、GBZ 70-2015诊断标准、职业健康检查、预防措施、接触限值、治疗原则、劳动者权利",
-      "filename": "pneumoconiosis-training.pdf",
-      "tags": [
-        "尘肺",
-        "培训",
-        "GBZ70",
-        "粉尘",
-        "防护"
-      ],
-      "date": "2026-02-20",
-      "source": "OpenClaw"
     },
     {
       "id": "notebooklm-133945",
@@ -46,5 +46,5 @@
       "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T09:12:43.852Z"
+  "updatedAt": "2026-02-20T09:12:50.279Z"
 }
