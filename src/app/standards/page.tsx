@@ -48,7 +48,7 @@ export default async function StandardsPage() {
   const catalog = loadStandardsCatalog();
   const pdfMap = loadPdfAvailability();
   const docMap = loadDocAvailability();
-  const pdfBaseUrl = process.env.PDF_BASE_URL || "https://brooks-rev-ryan-visited.trycloudflare.com";
+  const pdfBaseUrl = "/pdf-files";
   const downloadCount = new Set([...Object.keys(pdfMap), ...Object.keys(docMap)]).size;
 
   return (
