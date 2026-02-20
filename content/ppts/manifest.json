@@ -1,4 +1,20 @@
 {
-  "items": [],
-  "updatedAt": "2026-02-20T00:00:00.000Z"
+  "items": [
+    {
+      "id": "post-821288",
+      "title": "职业性噪声聋防护培训课件",
+      "description": "5页专业培训课件，涵盖噪声基本概念、健康影响、GBZ 49-2014诊断要点、接触限值、防护措施、健康监护要求",
+      "filename": "noise-hearing-loss-training.pdf",
+      "tags": [
+        "噪声聋",
+        "培训",
+        "GBZ49",
+        "防护",
+        "听力保护"
+      ],
+      "date": "2026-02-20",
+      "source": "AI生成"
+    }
+  ],
+  "updatedAt": "2026-02-20T03:40:21.288Z"
 }
