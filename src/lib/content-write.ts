@@ -17,6 +17,7 @@ export interface UpsertContentPayload {
   source?: string;
   attachments?: ContentAttachment[];
   content: string;
+  pdfUrl?: string;
 }
 
 function sanitizeYamlString(value: string): string {
