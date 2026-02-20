@@ -12,11 +12,23 @@ interface ContentItem {
   tags: string[];
 }
 
+interface MediaItem {
+  slug: string;
+  title: string;
+  date: string;
+  description: string;
+  tags: string[];
+  filename: string;
+  source?: string;
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [articles, setArticles] = useState<ContentItem[]>([]);
   const [laws, setLaws] = useState<ContentItem[]>([]);
+  const [images, setImages] = useState<MediaItem[]>([]);
+  const [ppts, setPpts] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
@@ -105,12 +117,16 @@ export default function AdminPage() {
   const fetchContent = useCallback(async () => {
     setLoading(true);
     try {
-      const [artRes, lawRes] = await Promise.all([
+      const [artRes, lawRes, imgRes, pptRes] = await Promise.all([
         fetch("/api/admin/list?kind=articles"),
         fetch("/api/admin/list?kind=laws"),
+        fetch("/api/admin/list?kind=images"),
+        fetch("/api/admin/list?kind=ppts"),
       ]);
       if (artRes.ok) setArticles(await artRes.json());
       if (lawRes.ok) setLaws(await lawRes.json());
+      if (imgRes.ok) setImages(await imgRes.json());
+      if (pptRes.ok) setPpts(await pptRes.json());
     } catch {
       // ignore
     }
@@ -123,8 +139,8 @@ export default function AdminPage() {
     }
   }, [status, fetchContent]);
 
-  async function handleDelete(kind: string, slug: string) {
-    if (!confirm(`确定要删除 ${slug} 吗？此操作不可撤销。`)) return;
+  async function handleDelete(kind: string, slug: string, displayName?: string) {
+    if (!confirm(`确定要删除 ${displayName || slug} 吗？此操作不可撤销。`)) return;
 
     setDeleting(`${kind}/${slug}`);
     try {
@@ -136,7 +152,9 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         if (kind === "articles") setArticles((prev) => prev.filter((a) => a.slug !== slug));
-        else setLaws((prev) => prev.filter((l) => l.slug !== slug));
+        else if (kind === "laws") setLaws((prev) => prev.filter((l) => l.slug !== slug));
+        else if (kind === "images") setImages((prev) => prev.filter((i) => i.slug !== slug));
+        else if (kind === "ppts") setPpts((prev) => prev.filter((p) => p.slug !== slug));
       } else {
         alert(`删除失败: ${data.message}`);
       }
@@ -181,7 +199,7 @@ export default function AdminPage() {
       </div>
 
       {/* Stats */}
-      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
         <div className="card p-4 text-center">
           <div className="text-2xl font-bold text-[var(--brand)]">{articles.length}</div>
           <div className="text-[12px] text-[var(--text-muted)]">专业文章</div>
@@ -189,6 +207,14 @@ export default function AdminPage() {
         <div className="card p-4 text-center">
           <div className="text-2xl font-bold text-[var(--brand)]">{laws.length}</div>
           <div className="text-[12px] text-[var(--text-muted)]">标准法规</div>
+        </div>
+        <div className="card p-4 text-center">
+          <div className="text-2xl font-bold text-[var(--brand)]">{images.length}</div>
+          <div className="text-[12px] text-[var(--text-muted)]">图片资源</div>
+        </div>
+        <div className="card p-4 text-center">
+          <div className="text-2xl font-bold text-[var(--brand)]">{ppts.length}</div>
+          <div className="text-[12px] text-[var(--text-muted)]">PPT课件</div>
         </div>
         <div className="card p-4 text-center">
           <div className="text-2xl font-bold text-[var(--success)]">在线</div>
@@ -319,6 +345,74 @@ export default function AdminPage() {
                 </div>
               </form>
             </div>
+          </section>
+
+          {/* Images */}
+          <section className="mb-8">
+            <h2 className="mb-3 text-[15px] font-semibold text-[var(--text-primary)]">
+              图片资源 ({images.length})
+            </h2>
+            {images.length === 0 ? (
+              <div className="card p-6 text-center text-[13px] text-[var(--text-muted)]">暂无图片</div>
+            ) : (
+              <div className="space-y-2">
+                {images.map((item) => (
+                  <div key={item.slug} className="card flex items-center justify-between p-4">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="truncate text-[14px] font-medium text-[var(--text-primary)]">{item.title}</h3>
+                      <div className="mt-1 flex items-center gap-2 text-[12px] text-[var(--text-muted)]">
+                        <span>{item.source || "图片"}</span>
+                        <span>·</span>
+                        <span>{item.date}</span>
+                        <span>·</span>
+                        <span className="truncate text-[11px] opacity-60">{item.filename}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDelete("images", item.slug, item.title)}
+                      disabled={deleting === `images/${item.slug}`}
+                      className="ml-3 shrink-0 rounded-[var(--radius-sm)] border border-red-200 px-3 py-1.5 text-[12px] font-medium text-red-500 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
+                    >
+                      {deleting === `images/${item.slug}` ? "删除中..." : "删除"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* PPTs */}
+          <section className="mb-8">
+            <h2 className="mb-3 text-[15px] font-semibold text-[var(--text-primary)]">
+              PPT课件 ({ppts.length})
+            </h2>
+            {ppts.length === 0 ? (
+              <div className="card p-6 text-center text-[13px] text-[var(--text-muted)]">暂无课件</div>
+            ) : (
+              <div className="space-y-2">
+                {ppts.map((item) => (
+                  <div key={item.slug} className="card flex items-center justify-between p-4">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="truncate text-[14px] font-medium text-[var(--text-primary)]">{item.title}</h3>
+                      <div className="mt-1 flex items-center gap-2 text-[12px] text-[var(--text-muted)]">
+                        <span>{item.source || "PPT"}</span>
+                        <span>·</span>
+                        <span>{item.date}</span>
+                        <span>·</span>
+                        <span className="truncate text-[11px] opacity-60">{item.filename}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDelete("ppts", item.slug, item.title)}
+                      disabled={deleting === `ppts/${item.slug}`}
+                      className="ml-3 shrink-0 rounded-[var(--radius-sm)] border border-red-200 px-3 py-1.5 text-[12px] font-medium text-red-500 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
+                    >
+                      {deleting === `ppts/${item.slug}` ? "删除中..." : "删除"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Laws */}

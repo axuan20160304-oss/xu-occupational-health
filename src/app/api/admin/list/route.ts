@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getContentList } from "@/lib/content";
 import type { ContentKind } from "@/lib/content";
+import { getImageList, getPptList } from "@/lib/media-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,16 +18,32 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const kind = request.nextUrl.searchParams.get("kind") as ContentKind | null;
-  if (!kind || !["articles", "laws"].includes(kind)) {
+  const kind = request.nextUrl.searchParams.get("kind");
+  const allowedKinds = ["articles", "laws", "images", "ppts"];
+  if (!kind || !allowedKinds.includes(kind)) {
     return NextResponse.json(
-      { success: false, message: "kind 参数必须是 articles 或 laws" },
+      { success: false, message: "kind 参数必须是 articles、laws、images 或 ppts" },
       { status: 400 },
     );
   }
 
   try {
-    const items = await getContentList(kind);
+    if (kind === "images" || kind === "ppts") {
+      const items = kind === "images" ? await getImageList() : await getPptList();
+      return NextResponse.json(
+        items.map((item) => ({
+          slug: item.id,
+          title: item.title,
+          date: item.date,
+          description: item.description,
+          tags: item.tags,
+          filename: item.filename,
+          source: item.source,
+        })),
+      );
+    }
+
+    const items = await getContentList(kind as ContentKind);
     return NextResponse.json(
       items.map((item) => ({
         slug: item.slug,
