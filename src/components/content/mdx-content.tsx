@@ -1,5 +1,6 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { ReactNode } from "react";
+import remarkGfm from "remark-gfm";
 
 interface MdxContentProps {
   source: string;
@@ -34,12 +35,30 @@ const components = {
   code: (props: { children: ReactNode }) => (
     <code className="rounded bg-[var(--surface-alt)] px-1.5 py-0.5 text-sm" {...props} />
   ),
+  table: (props: { children: ReactNode }) => (
+    <div className="mt-4 overflow-x-auto rounded-lg border border-[var(--border)]">
+      <table className="w-full text-sm" {...props} />
+    </div>
+  ),
+  thead: (props: { children: ReactNode }) => (
+    <thead className="bg-[var(--surface-alt)] text-left text-[var(--text-primary)]" {...props} />
+  ),
+  tbody: (props: { children: ReactNode }) => <tbody {...props} />,
+  tr: (props: { children: ReactNode }) => (
+    <tr className="border-b border-[var(--border)] last:border-0" {...props} />
+  ),
+  th: (props: { children: ReactNode }) => (
+    <th className="px-4 py-2.5 font-semibold text-[13px]" {...props} />
+  ),
+  td: (props: { children: ReactNode }) => (
+    <td className="px-4 py-2.5 text-[13px] text-[var(--text-muted)]" {...props} />
+  ),
 };
 
 export function MdxContent({ source }: MdxContentProps) {
   return (
     <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
-      <MDXRemote source={source} components={components} />
+      <MDXRemote source={source} components={components} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
     </article>
   );
 }
