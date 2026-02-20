@@ -27,7 +27,22 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
+    },
+    {
+      "id": "notebooklm-020642",
+      "title": "职业性粉尘危害防护攻略（NotebookLM信息图）",
+      "description": "NotebookLM自动生成的职业性粉尘危害防护信息图，涵盖尘肺病类型、防护措施、接触限值等核心内容",
+      "filename": "notebooklm-pneumoconiosis-infographic.png",
+      "tags": [
+        "尘肺",
+        "粉尘",
+        "防护",
+        "NotebookLM",
+        "信息图"
+      ],
+      "date": "2026-02-20",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T04:49:28.100Z"
+  "updatedAt": "2026-02-20T05:23:40.642Z"
 }
