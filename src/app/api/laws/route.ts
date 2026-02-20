@@ -18,6 +18,51 @@ function validatePayload(payload: Partial<UpsertContentPayload>): string | null 
   return null;
 }
 
+async function searchStandardPdf(title: string, source?: string): Promise<string | null> {
+  const query = source || title;
+
+  // Strategy: Try multiple known Chinese standard PDF sources
+  const searchTargets = [
+    // 国家标准全文公开系统 - search page
+    `https://openstd.samr.gov.cn/bzgk/gb/std_list?p.p1=0&p.p90=${encodeURIComponent(query)}`,
+    // 安全管理网
+    `https://www.safehoo.com/search.php?q=${encodeURIComponent(query + " pdf")}`,
+    // 标准下载站
+    `https://www.bzxzz.com/search?q=${encodeURIComponent(query)}`,
+  ];
+
+  for (const url of searchTargets) {
+    try {
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          Accept: "text/html",
+        },
+        redirect: "follow",
+      });
+
+      if (!res.ok) continue;
+
+      const html = await res.text();
+
+      // Extract PDF links from the page
+      const pdfMatches = html.match(/https?:\/\/[^\s"'<>]+\.pdf/gi);
+      if (pdfMatches && pdfMatches.length > 0) {
+        // Filter for relevant PDFs (containing standard number keywords)
+        const keywords = query.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const relevant = pdfMatches.find((u) =>
+          u.toLowerCase().replace(/[^a-z0-9]/g, "").includes(keywords),
+        );
+        return relevant || pdfMatches[0];
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
 async function downloadAndUploadPdf(
   pdfUrl: string,
   slug: string,
@@ -119,8 +164,14 @@ export async function POST(request: NextRequest) {
   const slug = createSlug(slugInput, "law");
   let pdfLocalUrl: string | null = null;
 
-  if (payload.pdfUrl) {
-    pdfLocalUrl = await downloadAndUploadPdf(payload.pdfUrl, slug);
+  // If pdfUrl provided, use it directly; otherwise auto-search
+  let pdfSource = payload.pdfUrl;
+  if (!pdfSource && (payload.source || payload.title)) {
+    pdfSource = await searchStandardPdf(payload.title as string, payload.source) ?? undefined;
+  }
+
+  if (pdfSource) {
+    pdfLocalUrl = await downloadAndUploadPdf(pdfSource, slug);
   }
 
   const attachments = payload.attachments ?? [];
