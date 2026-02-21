@@ -43,7 +43,23 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
+    },
+    {
+      "id": "summer-survival-guide-423370",
+      "title": "科学度夏防暑指南（Summer Survival Guide）",
+      "description": "NotebookLM自动生成的高温中暑预防与急救演示文稿，涵盖中暑分级、急救四步法、中医调护等内容，共15页",
+      "filename": "summer-survival-guide-423355.pdf",
+      "tags": [
+        "中暑",
+        "防暑",
+        "热射病",
+        "急救",
+        "演示文稿",
+        "NotebookLM"
+      ],
+      "date": "2026-02-21",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-20T19:53:32.095Z"
+  "updatedAt": "2026-02-21T08:27:03.370Z"
 }
