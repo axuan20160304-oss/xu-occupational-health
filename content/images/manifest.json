@@ -28,7 +28,22 @@
       ],
       "date": "2026-02-20",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-903358",
+      "title": "职业性手臂振动病防护指南（信息图）",
+      "description": "NotebookLM自动生成的职业性手臂振动病科普信息图，涵盖临床表现、病情分级、预防原则及治疗建议",
+      "filename": "post-903352.png",
+      "tags": [
+        "手臂振动病",
+        "振动危害",
+        "职业病",
+        "信息图",
+        "NotebookLM"
+      ],
+      "date": "2026-02-21",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-21T04:50:33.052Z"
+  "updatedAt": "2026-02-21T08:18:23.358Z"
 }
