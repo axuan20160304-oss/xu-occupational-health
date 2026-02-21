@@ -43,7 +43,23 @@
       ],
       "date": "2026-02-21",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-517208",
+      "title": "职业性苯中毒预防指南（信息图）",
+      "description": "NotebookLM自动生成的职业性苯中毒防护信息图，涵盖危害识别、三级预防措施、国家接触限值及废气治理方案",
+      "filename": "post-517201.png",
+      "tags": [
+        "苯中毒",
+        "GBZ 68",
+        "职业防护",
+        "三级预防",
+        "信息图",
+        "NotebookLM"
+      ],
+      "date": "2026-02-21",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-21T08:18:23.358Z"
+  "updatedAt": "2026-02-21T08:45:17.208Z"
 }
