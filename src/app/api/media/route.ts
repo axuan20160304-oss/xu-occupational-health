@@ -2,12 +2,18 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiKey } from "@/lib/api-auth";
+import { saveMediaManifest, getImageList, getPptList, type MediaItem } from "@/lib/media-store";
 
 export const runtime = "nodejs";
 
 interface MediaPayload {
   fileName: string;
   fileData: string;
+  title?: string;
+  description?: string;
+  tags?: string[];
+  source?: string;
+  kind?: "images" | "ppts";
 }
 
 const MAX_MEDIA_BYTES = 20 * 1024 * 1024;
@@ -81,18 +87,38 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const uploadDirectory = path.join(process.cwd(), "public", "uploads");
+  const kind = payload.kind || (safeName.match(/\.pptx?$/i) ? "ppts" : "images");
+  const subDir = kind === "ppts" ? "ppts" : "images";
+  const uploadDirectory = path.join(process.cwd(), "public", "uploads", subDir);
   await fs.mkdir(uploadDirectory, { recursive: true });
 
-  const finalName = `${Date.now()}-${safeName}`;
+  const finalName = safeName;
   const targetPath = path.join(uploadDirectory, finalName);
 
   await fs.writeFile(targetPath, fileBuffer);
 
+  // Auto-update manifest if metadata provided
+  if (payload.title) {
+    const existing = kind === "ppts" ? await getPptList() : await getImageList();
+    const newItem: MediaItem = {
+      id: `openclaw-${Date.now().toString(36)}`,
+      title: payload.title,
+      description: payload.description || "",
+      filename: finalName,
+      tags: payload.tags || [],
+      date: new Date().toISOString().slice(0, 10),
+      source: payload.source || "OpenClaw",
+    };
+    // Avoid duplicates by filename
+    const items = existing.filter(i => i.filename !== finalName);
+    items.unshift(newItem);
+    await saveMediaManifest(kind, items);
+  }
+
   return NextResponse.json({
     success: true,
     fileName: finalName,
-    url: `/uploads/${finalName}`,
+    url: `/uploads/${subDir}/${finalName}`,
     bytes: fileBuffer.length,
   });
 }

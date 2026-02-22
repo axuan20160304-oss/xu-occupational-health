@@ -27,8 +27,11 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [statusFilter, setStatusFilter] = useState<"全部" | "现行" | "废止">("全部");
+  const [downloadFilter, setDownloadFilter] = useState<"全部" | "可下载" | "无文件">("全部");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 50;
+
+  const downloadableCount = useMemo(() => standards.filter(s => pdfMap[s.slug] || docMap[s.slug]).length, [standards, pdfMap, docMap]);
 
   const filtered = useMemo(() => {
     let result = standards;
@@ -36,9 +39,9 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
       const q = search.trim().toLowerCase();
       result = result.filter(
         (s) =>
-          s.code.toLowerCase().includes(q) ||
-          s.title.toLowerCase().includes(q) ||
-          s.fullTitle.toLowerCase().includes(q)
+          (s.code || "").toLowerCase().includes(q) ||
+          (s.title || "").toLowerCase().includes(q) ||
+          (s.fullTitle || "").toLowerCase().includes(q)
       );
     }
     if (selectedCategory !== "全部") {
@@ -47,8 +50,20 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
     if (statusFilter !== "全部") {
       result = result.filter((s) => s.status === statusFilter);
     }
+    if (downloadFilter === "可下载") {
+      result = result.filter((s) => pdfMap[s.slug] || docMap[s.slug]);
+    } else if (downloadFilter === "无文件") {
+      result = result.filter((s) => !pdfMap[s.slug] && !docMap[s.slug]);
+    }
+    // Sort: downloadable first, then by code
+    result = [...result].sort((a, b) => {
+      const aHas = pdfMap[a.slug] || docMap[a.slug] ? 0 : 1;
+      const bHas = pdfMap[b.slug] || docMap[b.slug] ? 0 : 1;
+      if (aHas !== bHas) return aHas - bHas;
+      return a.code.localeCompare(b.code, 'zh-CN');
+    });
     return result;
-  }, [standards, search, selectedCategory, statusFilter]);
+  }, [standards, search, selectedCategory, statusFilter, downloadFilter, pdfMap, docMap]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -57,6 +72,7 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
   const handleSearch = (val: string) => { setSearch(val); setPage(1); if (val.trim()) setSelectedCategory("全部"); };
   const handleCategory = (val: string) => { setSelectedCategory(val); setPage(1); };
   const handleStatus = (val: "全部" | "现行" | "废止") => { setStatusFilter(val); setPage(1); };
+  const handleDownload = (val: "全部" | "可下载" | "无文件") => { setDownloadFilter(val); setPage(1); };
 
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { "全部": standards.length };
@@ -97,6 +113,24 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
               )}
             >
               {s}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          {(["全部", "可下载", "无文件"] as const).map((d) => (
+            <button
+              key={d}
+              onClick={() => handleDownload(d)}
+              className={cn(
+                "rounded-lg px-3 py-2 text-xs font-medium transition",
+                downloadFilter === d
+                  ? d === "可下载" ? "bg-emerald-500/10 text-emerald-600 ring-1 ring-emerald-500/30"
+                    : d === "无文件" ? "bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/30"
+                    : "bg-[var(--brand)]/10 text-[var(--brand)] ring-1 ring-[var(--brand)]/30"
+                  : "bg-[var(--surface-alt)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              )}
+            >
+              {d === "可下载" ? `可下载 (${downloadableCount})` : d}
             </button>
           ))}
         </div>
@@ -213,7 +247,7 @@ export function StandardsCatalog({ standards, categories, pdfMap = {}, docMap = 
                       )}
                       {!pdfMap[s.slug] && !docMap[s.slug] && (
                         <a
-                          href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + s.title + " filetype:pdf")}`}
+                          href={`https://www.so.com/s?q=${encodeURIComponent(s.code + " " + (s.title || "") + " filetype:pdf")}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 rounded-lg bg-[var(--brand)]/10 px-2 py-1 text-xs font-medium text-[var(--brand)] transition hover:bg-[var(--brand)]/20"

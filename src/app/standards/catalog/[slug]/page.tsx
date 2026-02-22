@@ -114,7 +114,7 @@ export default async function CatalogDetailPage({ params }: CatalogDetailPagePro
   const related = findRelatedStandards(std);
   const pdfMap = loadPdfAvailability();
   const docMap = loadDocAvailability();
-  const pdfBaseUrl = process.env.PDF_BASE_URL || "https://5744a7de.r11.vip.cpolar.cn";
+  const pdfBaseUrl = "/pdf-files";
 
   const hasPdf = !!pdfMap[std.slug];
   const hasDoc = !!docMap[std.slug];
