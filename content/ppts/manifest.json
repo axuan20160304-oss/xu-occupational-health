@@ -60,6 +60,21 @@
       "date": "2026-02-21",
       "source": "NotebookLM"
     }
+    ,{
+      "id": "notebooklm-noise-protection-guide-222",
+      "title": "职业性噪声聋防护实务指南（NotebookLM演示文稿）",
+      "description": "NotebookLM自动生成的13页职业性噪声聋防护演示文稿，基于GBZ 49-2014标准，涵盖诊断要素、听力损失分级、工程控制、管理措施、个人防护及健康监护周期",
+      "filename": "notebooklm-noise-protection-guide.pdf",
+      "tags": [
+        "噪声聋",
+        "GBZ 49",
+        "培训课件",
+        "演示文稿",
+        "NotebookLM"
+      ],
+      "date": "2026-02-22",
+      "source": "NotebookLM"
+    }
   ],
-  "updatedAt": "2026-02-21T08:27:03.370Z"
+  "updatedAt": "2026-02-22T14:34:00.000Z"
 }
