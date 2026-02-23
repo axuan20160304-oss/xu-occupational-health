@@ -89,20 +89,6 @@
       ],
       "date": "2026-02-23",
       "source": "NotebookLM"
-    },
-    {
-      "id": "openclaw-731424",
-      "title": "OpenClaw端到端测试图片",
-      "description": "NotebookLM Publisher技能端到端测试 - 验证从生成到网站更新的完整流程",
-      "filename": "openclaw-731421.png",
-      "tags": [
-        "测试",
-        "E2E",
-        "OpenClaw",
-        "NotebookLM"
-      ],
-      "date": "2026-02-23",
-      "source": "NotebookLM"
     }
   ],
   "updatedAt": "2026-02-23T08:52:11.425Z"
