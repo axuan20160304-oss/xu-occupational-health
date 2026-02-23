@@ -89,7 +89,23 @@
       ],
       "date": "2026-02-23",
       "source": "NotebookLM"
+    },
+    {
+      "id": "post-775949",
+      "title": "职业性白内障防护全指南（信息图）",
+      "description": "NotebookLM自动生成的职业性眼部辐射损伤防护信息图，涵盖辐射损伤类型、健康监测建议及焊接防护镜遮光号选择指南",
+      "filename": "post-775940.png",
+      "tags": [
+        "白内障",
+        "眼部防护",
+        "辐射",
+        "焊接",
+        "信息图",
+        "NotebookLM"
+      ],
+      "date": "2026-02-23",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-23T08:52:11.425Z"
+  "updatedAt": "2026-02-23T09:09:35.949Z"
 }
