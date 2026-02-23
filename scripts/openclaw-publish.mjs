@@ -359,20 +359,49 @@ function gitCommitAndPush(filePaths, title, module) {
     console.log(`   ⚠️ Git: ${e.message.split("\n")[0]}`);
     return;
   }
-  // Auto push to remote
-  try {
-    execSync(`git push origin main`, { cwd: ROOT, stdio: "pipe" });
-    console.log(`   🚀 Git push 成功`);
-  } catch (e) {
-    console.log(`   ⚠️ Git push: ${e.message.split("\n")[0]}`);
+  // Auto push to remote (with retry and pull-before-push)
+  let pushSuccess = false;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      // Pull first to handle remote changes
+      try {
+        execSync(`git pull --rebase origin main`, { cwd: ROOT, stdio: "pipe", timeout: 30000 });
+      } catch {}
+      execSync(`git push origin main`, { cwd: ROOT, stdio: "pipe", timeout: 30000 });
+      console.log(`   🚀 Git push 成功`);
+      pushSuccess = true;
+      break;
+    } catch (e) {
+      console.log(`   ⚠️ Git push(${attempt+1}/3): ${e.message.split("\n")[0]}`);
+      if (attempt < 2) {
+        // Wait before retry
+        execSync(`sleep 3`, { stdio: "pipe" });
+      }
+    }
+  }
+  if (!pushSuccess) {
+    console.log(`   ❌ Git push 最终失败，跳过部署`);
+    return;
   }
   // Auto rebuild and restart local server
   try {
     console.log(`   🔨 正在重新构建...`);
-    execSync(`npm run build`, { cwd: ROOT, stdio: "pipe", timeout: 120000 });
+    execSync(`npm run build`, { cwd: ROOT, stdio: "pipe", timeout: 180000 });
     console.log(`   ✅ 构建成功`);
-    execSync(`pm2 restart xu-health-site`, { cwd: ROOT, stdio: "pipe" });
-    console.log(`   🌐 本地服务器已重启 → http://localhost:3000`);
+    // Try pm2 first, fallback to direct restart
+    try {
+      execSync(`pm2 restart xu-health-site`, { cwd: ROOT, stdio: "pipe" });
+      console.log(`   🌐 本地服务器已重启(pm2) → http://localhost:3000`);
+    } catch {
+      try {
+        execSync(`kill $(lsof -ti :3000) 2>/dev/null; sleep 1; nohup npx next start -p 3000 > /tmp/next-server.log 2>&1 &`, {
+          cwd: ROOT, stdio: "pipe", timeout: 15000,
+        });
+        console.log(`   🌐 本地服务器已重启(direct) → http://localhost:3000`);
+      } catch (e2) {
+        console.log(`   ⚠️ 服务器重启: ${e2.message.split("\n")[0]}`);
+      }
+    }
   } catch (e) {
     console.log(`   ⚠️ 本地部署: ${e.message.split("\n")[0]}`);
   }
