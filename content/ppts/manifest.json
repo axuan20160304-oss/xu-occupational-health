@@ -118,7 +118,25 @@
       ],
       "date": "2026-02-23",
       "source": "NotebookLM"
+    },
+    {
+      "id": "pfas-569852",
+      "title": "有机氟化合物（PFAS）职业危害培训课件",
+      "description": "NotebookLM自动生成的有机氟化合物职业危害培训演示文稿，涵盖PFOS/PFOA致癌性、全氟异丁烯急性毒性、聚合物烟雾热、职业暴露限值及综合防护措施",
+      "filename": "pfas-569825.pptx",
+      "tags": [
+        "有机氟",
+        "PFAS",
+        "PFOS",
+        "PFOA",
+        "全氟异丁烯",
+        "职业危害",
+        "PPT",
+        "NotebookLM"
+      ],
+      "date": "2026-02-23",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-23T09:31:23.937Z"
+  "updatedAt": "2026-02-23T10:12:49.852Z"
 }
