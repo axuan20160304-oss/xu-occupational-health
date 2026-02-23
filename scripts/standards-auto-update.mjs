@@ -16,7 +16,7 @@
  *   0 * * * * cd /Users/xuguangjun/徐广军个人网站/site && node scripts/standards-auto-update.mjs >> /tmp/standards-update.log 2>&1
  */
 
-import { readFileSync, writeFileSync, existsSync, appendFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, appendFileSync, copyFileSync, unlinkSync, statSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -26,8 +26,14 @@ import http from "node:http";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const CATALOG_PATH = join(ROOT, "content/standards/standards-catalog.json");
+const BACKUP_DIR = join(ROOT, "content/standards/backups");
 const LOG_PATH = "/tmp/standards-update.log";
+const LOCK_PATH = "/tmp/standards-update.lock";
+const HEALTH_PATH = "/tmp/standards-update-health.json";
 const DRY_RUN = process.argv.includes("--dry-run");
+const MAX_LOG_SIZE = 5 * 1024 * 1024; // 5MB log rotation
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 5000; // 5s between retries
 
 // 职业健康相关标准的搜索关键词
 const SEARCH_KEYWORDS = [
@@ -52,8 +58,115 @@ function log(msg) {
   const line = `[${ts}] ${msg}`;
   console.log(line);
   try {
+    // Log rotation: if log > 5MB, truncate to last 1MB
+    if (existsSync(LOG_PATH)) {
+      const stat = statSync(LOG_PATH);
+      if (stat.size > MAX_LOG_SIZE) {
+        const content = readFileSync(LOG_PATH, "utf-8");
+        writeFileSync(LOG_PATH, content.slice(-1024 * 1024), "utf-8");
+      }
+    }
     appendFileSync(LOG_PATH, line + "\n");
   } catch {}
+}
+
+// Lock file to prevent concurrent runs
+function acquireLock() {
+  if (existsSync(LOCK_PATH)) {
+    try {
+      const lockData = JSON.parse(readFileSync(LOCK_PATH, "utf-8"));
+      const lockAge = Date.now() - lockData.timestamp;
+      // Stale lock (>30 min) - remove it
+      if (lockAge > 30 * 60 * 1000) {
+        log("⚠️ 发现过期锁文件，已清除");
+        unlinkSync(LOCK_PATH);
+      } else {
+        log(`⏳ 另一个实例正在运行 (PID: ${lockData.pid}, ${Math.round(lockAge/1000)}s前)，跳过`);
+        return false;
+      }
+    } catch {
+      unlinkSync(LOCK_PATH);
+    }
+  }
+  writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, timestamp: Date.now() }));
+  return true;
+}
+
+function releaseLock() {
+  try { unlinkSync(LOCK_PATH); } catch {}
+}
+
+// Backup catalog before modification
+function backupCatalog() {
+  try {
+    mkdirSync(BACKUP_DIR, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    const backupPath = join(BACKUP_DIR, `standards-catalog-${ts}.json`);
+    copyFileSync(CATALOG_PATH, backupPath);
+    log(`💾 已备份: ${backupPath}`);
+    // Keep only last 10 backups
+    cleanOldBackups();
+    return backupPath;
+  } catch (e) {
+    log(`⚠️ 备份失败: ${e.message}`);
+    return null;
+  }
+}
+
+function cleanOldBackups() {
+  try {
+    execSync(`ls -t "${BACKUP_DIR}"/standards-catalog-*.json 2>/dev/null | tail -n +11 | xargs rm -f`, { stdio: "pipe" });
+  } catch {}
+}
+
+// Health check - write status for monitoring
+function writeHealthStatus(status, details = {}) {
+  try {
+    writeFileSync(HEALTH_PATH, JSON.stringify({
+      status,
+      lastRun: new Date().toISOString(),
+      pid: process.pid,
+      catalogCount: details.catalogCount || 0,
+      newStandards: details.newStandards || 0,
+      errors: details.errors || [],
+      ...details,
+    }, null, 2));
+  } catch {}
+}
+
+// Retry wrapper for network requests
+async function withRetry(fn, label, retries = MAX_RETRIES) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i < retries - 1) {
+        log(`   ⚠️ ${label} 失败(${i+1}/${retries}): ${e.message}，${RETRY_DELAY/1000}s后重试...`);
+        await new Promise(r => setTimeout(r, RETRY_DELAY));
+      } else {
+        log(`   ❌ ${label} 最终失败: ${e.message}`);
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+// Validate catalog JSON integrity
+function validateCatalog(data) {
+  if (!data || typeof data !== "object") return "catalog不是对象";
+  if (!Array.isArray(data.standards)) return "standards不是数组";
+  if (data.standards.length === 0) return "standards为空";
+  for (const s of data.standards) {
+    if (!s.code || !s.title || !s.id) return `标准缺少必要字段: ${JSON.stringify(s).slice(0,100)}`;
+  }
+  // Check for duplicate IDs
+  const ids = new Set();
+  for (const s of data.standards) {
+    if (ids.has(s.id)) return `重复ID: ${s.id}`;
+    ids.add(s.id);
+  }
+  return null; // valid
 }
 
 function loadCatalog() {
@@ -250,7 +363,25 @@ async function main() {
   log("========================================");
   log("🔄 标准自动维护开始" + (DRY_RUN ? " [DRY RUN]" : ""));
   
+  // Acquire lock to prevent concurrent runs
+  if (!acquireLock()) {
+    writeHealthStatus("skipped", { reason: "concurrent run" });
+    return;
+  }
+  
+  const errors = [];
+  
   const catalog = loadCatalog();
+  
+  // Validate existing catalog
+  const validationError = validateCatalog(catalog);
+  if (validationError) {
+    log(`❌ 现有catalog验证失败: ${validationError}`);
+    releaseLock();
+    writeHealthStatus("error", { errors: [validationError] });
+    return;
+  }
+  
   const existingCodes = getExistingCodes(catalog);
   let nextId = getNextId(catalog);
   const newStandards = [];
@@ -264,7 +395,7 @@ async function main() {
     log(`🔍 搜索: ${term}`);
     
     try {
-      const results = await searchBiaozhun(term);
+      const results = await withRetry(() => searchBiaozhun(term), `biaozhun搜索"${term}"`) || [];
       for (const std of results) {
         if (!existingCodes.has(std.code) && isRelevantStandard(std.code, std.title)) {
           const yearMatch = std.code.match(/(\d{4})$/);
@@ -287,7 +418,9 @@ async function main() {
         }
       }
     } catch (e) {
-      log(`   ⚠️ 搜索失败: ${e.message}`);
+      const errMsg = `biaozhun搜索"${term}"失败: ${e.message}`;
+      log(`   ⚠️ ${errMsg}`);
+      errors.push(errMsg);
     }
     
     // Rate limiting
@@ -298,7 +431,7 @@ async function main() {
   for (const keyword of ["GBZ", "职业卫生"]) {
     log(`🔍 搜索openstd: ${keyword}`);
     try {
-      const results = await searchOpenstd(keyword);
+      const results = await withRetry(() => searchOpenstd(keyword), `openstd搜索"${keyword}"`) || [];
       for (const std of results) {
         if (!existingCodes.has(std.code) && isRelevantStandard(std.code, std.title)) {
           const yearMatch = std.code.match(/(\d{4})$/);
@@ -321,7 +454,9 @@ async function main() {
         }
       }
     } catch (e) {
-      log(`   ⚠️ openstd搜索失败: ${e.message}`);
+      const errMsg = `openstd搜索"${keyword}"失败: ${e.message}`;
+      log(`   ⚠️ ${errMsg}`);
+      errors.push(errMsg);
     }
     
     await new Promise(r => setTimeout(r, 2000));
@@ -331,6 +466,8 @@ async function main() {
   if (newStandards.length === 0) {
     log("✅ 未发现新标准，无需更新");
     log("========================================\n");
+    releaseLock();
+    writeHealthStatus("ok", { catalogCount: catalog.standards.length, newStandards: 0, errors });
     return;
   }
   
@@ -342,57 +479,140 @@ async function main() {
       log(`   - ${s.code} ${s.title}`);
     }
     log("========================================\n");
+    releaseLock();
+    writeHealthStatus("dry-run", { catalogCount: catalog.standards.length, newStandards: newStandards.length, errors });
     return;
   }
   
-  // 4. 更新catalog
+  // 4. Backup before modification
+  const backupPath = backupCatalog();
+  
+  // 5. 更新catalog
   catalog.standards.push(...newStandards);
+  
+  // Validate before saving
+  const postValidation = validateCatalog(catalog);
+  if (postValidation) {
+    log(`❌ 更新后catalog验证失败: ${postValidation}，回滚`);
+    if (backupPath) {
+      copyFileSync(backupPath, CATALOG_PATH);
+      log("↩️ 已从备份恢复");
+    }
+    releaseLock();
+    writeHealthStatus("error", { errors: [postValidation] });
+    return;
+  }
+  
   saveCatalog(catalog);
   log(`💾 已更新标准目录，新总数: ${catalog.standards.length}`);
   
-  // 5. Git commit + push
-  try {
-    execSync(`git add "${CATALOG_PATH}"`, { cwd: ROOT, stdio: "pipe" });
-    const msg = `auto: 自动添加${newStandards.length}个新标准 (${new Date().toISOString().slice(0,10)})`;
-    execSync(`git commit -m "${msg}"`, { cwd: ROOT, stdio: "pipe" });
-    log("📦 Git commit 成功");
+  // 6. Git commit + push (with retry)
+  let gitSuccess = false;
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      execSync(`git add "${CATALOG_PATH}"`, { cwd: ROOT, stdio: "pipe" });
+      const msg = `auto: 自动添加${newStandards.length}个新标准 (${new Date().toISOString().slice(0,10)})`;
+      execSync(`git commit -m "${msg}"`, { cwd: ROOT, stdio: "pipe" });
+      log("📦 Git commit 成功");
+      
+      // Pull before push to handle remote changes
+      try {
+        execSync(`git pull --rebase origin main`, { cwd: ROOT, stdio: "pipe", timeout: 30000 });
+      } catch {}
+      
+      execSync(`git push origin main`, { cwd: ROOT, stdio: "pipe", timeout: 30000 });
+      log("🚀 Git push 成功");
+      gitSuccess = true;
+      break;
+    } catch (e) {
+      const errMsg = `Git操作(${attempt+1}/${MAX_RETRIES}): ${e.message.split("\n")[0]}`;
+      log(`⚠️ ${errMsg}`);
+      errors.push(errMsg);
+      if (attempt < MAX_RETRIES - 1) {
+        await new Promise(r => setTimeout(r, RETRY_DELAY));
+      }
+    }
+  }
+  
+  // 7. Rebuild & deploy (only if git succeeded)
+  if (gitSuccess) {
+    try {
+      log("🔨 正在构建...");
+      execSync(`npm run build`, { cwd: ROOT, stdio: "pipe", timeout: 180000 });
+      log("✅ 构建成功");
+    } catch (e) {
+      const errMsg = `构建失败: ${e.message.split("\n")[0]}`;
+      log(`⚠️ ${errMsg}`);
+      errors.push(errMsg);
+    }
     
-    execSync(`git push origin main`, { cwd: ROOT, stdio: "pipe", timeout: 30000 });
-    log("🚀 Git push 成功");
-  } catch (e) {
-    log(`⚠️ Git操作: ${e.message.split("\n")[0]}`);
+    try {
+      log("☁️ 正在部署到Vercel...");
+      execSync(`npx vercel --prod --yes`, { cwd: ROOT, stdio: "pipe", timeout: 300000 });
+      log("✅ Vercel部署成功");
+    } catch (e) {
+      const errMsg = `Vercel部署: ${e.message.split("\n")[0]}`;
+      log(`⚠️ ${errMsg}`);
+      errors.push(errMsg);
+    }
+    
+    // 8. Restart local server via pm2 or direct
+    try {
+      execSync(`pm2 restart xu-health-site 2>/dev/null || (kill $(lsof -ti :3000) 2>/dev/null; sleep 1; nohup npx next start -p 3000 > /tmp/next-server.log 2>&1 &)`, {
+        cwd: ROOT, stdio: "pipe", timeout: 15000,
+      });
+      log("🌐 本地服务器已重启");
+    } catch (e) {
+      log(`⚠️ 服务器重启: ${e.message.split("\n")[0]}`);
+    }
+    
+    // 9. Health check - verify website is responding
+    await new Promise(r => setTimeout(r, 3000));
+    try {
+      await verifyWebsite();
+      log("✅ 网站健康检查通过");
+    } catch (e) {
+      const errMsg = `网站健康检查失败: ${e.message}`;
+      log(`⚠️ ${errMsg}`);
+      errors.push(errMsg);
+    }
+  } else {
+    log("⚠️ Git失败，跳过构建和部署");
   }
   
-  // 6. Rebuild & deploy
-  try {
-    log("🔨 正在构建...");
-    execSync(`npx next build`, { cwd: ROOT, stdio: "pipe", timeout: 120000 });
-    log("✅ 构建成功");
-  } catch (e) {
-    log(`⚠️ 构建失败: ${e.message.split("\n")[0]}`);
-  }
+  releaseLock();
+  writeHealthStatus(gitSuccess ? "ok" : "partial", {
+    catalogCount: catalog.standards.length,
+    newStandards: newStandards.length,
+    gitSuccess,
+    errors,
+  });
   
-  try {
-    log("☁️ 正在部署到Vercel...");
-    execSync(`npx vercel --prod --yes`, { cwd: ROOT, stdio: "pipe", timeout: 300000 });
-    log("✅ Vercel部署成功");
-  } catch (e) {
-    log(`⚠️ Vercel部署: ${e.message.split("\n")[0]}`);
-  }
-  
-  // 7. Restart local server
-  try {
-    execSync(`kill $(lsof -ti :3000) 2>/dev/null; sleep 1; npx next start -p 3000 &`, {
-      cwd: ROOT, stdio: "pipe", timeout: 10000,
-    });
-    log("🌐 本地服务器已重启");
-  } catch {}
-  
-  log(`✅ 自动维护完成，新增${newStandards.length}个标准`);
+  log(`✅ 自动维护完成，新增${newStandards.length}个标准${errors.length > 0 ? ` (${errors.length}个警告)` : ""}`);
   log("========================================\n");
+}
+
+/**
+ * 验证网站是否正常响应
+ */
+async function verifyWebsite() {
+  return new Promise((resolve, reject) => {
+    const req = http.get("http://localhost:3000/standards", { timeout: 10000 }, (res) => {
+      if (res.statusCode === 200) {
+        resolve();
+      } else {
+        reject(new Error(`HTTP ${res.statusCode}`));
+      }
+      res.resume();
+    });
+    req.on("error", reject);
+    req.on("timeout", () => { req.destroy(); reject(new Error("timeout")); });
+  });
 }
 
 main().catch((err) => {
   log(`❌ 自动维护错误: ${err.message}`);
+  releaseLock();
+  writeHealthStatus("crash", { errors: [err.message] });
   process.exit(1);
 });
