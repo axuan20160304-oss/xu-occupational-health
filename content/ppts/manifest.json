@@ -87,7 +87,21 @@
       ],
       "date": "2026-02-23",
       "source": "openclaw"
+    },
+    {
+      "id": "notebooklm-690103",
+      "title": "职业性噪声聋防护指南（NotebookLM演示文稿）",
+      "description": "NotebookLM自动生成的职业性噪声聋防护演示文稿，涵盖诊断标准、防护措施、健康监护等内容",
+      "filename": "notebooklm-690093.pdf",
+      "tags": [
+        "噪声聋",
+        "职业防护",
+        "演示文稿",
+        "NotebookLM"
+      ],
+      "date": "2026-02-23",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-23T03:44:26.008Z"
+  "updatedAt": "2026-02-23T08:01:30.103Z"
 }
