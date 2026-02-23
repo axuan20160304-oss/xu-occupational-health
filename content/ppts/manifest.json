@@ -59,8 +59,8 @@
       ],
       "date": "2026-02-21",
       "source": "NotebookLM"
-    }
-    ,{
+    },
+    {
       "id": "notebooklm-noise-protection-guide-222",
       "title": "职业性噪声聋防护实务指南（NotebookLM演示文稿）",
       "description": "NotebookLM自动生成的13页职业性噪声聋防护演示文稿，基于GBZ 49-2014标准，涵盖诊断要素、听力损失分级、工程控制、管理措施、个人防护及健康监护周期",
@@ -74,7 +74,20 @@
       ],
       "date": "2026-02-22",
       "source": "NotebookLM"
+    },
+    {
+      "id": "gbz-188-2025-266008",
+      "title": "GBZ 188-2025 职业健康监护技术规范合规路线图",
+      "description": "GBZ 188-2025职业健康监护技术规范的合规实施路线图，涵盖体检项目、周期、禁忌证等关键要素",
+      "filename": "gbz-188-2025-265982.pptx",
+      "tags": [
+        "GBZ 188-2025",
+        "职业健康监护",
+        "合规路线图"
+      ],
+      "date": "2026-02-23",
+      "source": "openclaw"
     }
   ],
-  "updatedAt": "2026-02-22T14:34:00.000Z"
+  "updatedAt": "2026-02-23T03:44:26.008Z"
 }
