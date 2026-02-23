@@ -13456,8 +13456,8 @@
     {
       "id": 824,
       "code": "GBZ/T 238-2014",
-      "title": "职业性噪声聋的诊断",
-      "fullTitle": "GBZ/T 238-2014 职业性噪声聋的诊断",
+      "title": "职业性爆震聋的诊断",
+      "fullTitle": "GBZ/T 238-2014 职业性爆震聋的诊断",
       "year": 2014,
       "status": "现行",
       "category": "职业病诊断",
@@ -13503,6 +13503,6 @@
       "其他": 5
     }
   },
-  "generatedAt": "2026-02-23T13:13:40.900656",
+  "generatedAt": "2026-02-23T13:35:23.240247",
   "source": "generate-standards-catalog.mjs"
 }
