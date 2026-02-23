@@ -101,7 +101,24 @@
       ],
       "date": "2026-02-23",
       "source": "NotebookLM"
+    },
+    {
+      "id": "ppt-083937",
+      "title": "职业性白内障眼部防护培训课件（PPT）",
+      "description": "NotebookLM自动生成的职业性白内障防护培训演示文稿，涵盖激光辐射安全标准、ICNIRP暴露限值、焊接防护镜选择及职业性眼病预防",
+      "filename": "ppt-083918.pptx",
+      "tags": [
+        "白内障",
+        "眼部防护",
+        "激光辐射",
+        "ICNIRP",
+        "焊接",
+        "PPT",
+        "NotebookLM"
+      ],
+      "date": "2026-02-23",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-23T08:01:30.103Z"
+  "updatedAt": "2026-02-23T09:31:23.937Z"
 }
