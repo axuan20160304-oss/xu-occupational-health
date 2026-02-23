@@ -13399,7 +13399,7 @@
       "title": "声学 听阈与年龄关系的统计分布",
       "fullTitle": "GB/T 7582-2004 声学 听阈与年龄关系的统计分布",
       "year": 2004,
-      "status": "现行",
+      "status": "废止",
       "category": "技术规范与导则",
       "slug": "gb-t-7582-2004"
     },
@@ -13462,6 +13462,16 @@
       "status": "现行",
       "category": "职业病诊断",
       "slug": "gbz-t-238-2014"
+    },
+    {
+      "id": 825,
+      "code": "GB/T 7582-2025",
+      "title": "声学 听阈与年龄和性别关系的统计分布",
+      "fullTitle": "GB/T 7582-2025 声学 听阈与年龄和性别关系的统计分布",
+      "year": 2025,
+      "status": "现行",
+      "category": "技术规范与导则",
+      "slug": "gb-t-7582-2025"
     }
   ],
   "categories": [
@@ -13477,7 +13487,7 @@
     "职业健康监护"
   ],
   "stats": {
-    "total": 1289,
+    "total": 1290,
     "current": 670,
     "superseded": 147,
     "byCategory": {
@@ -13493,6 +13503,6 @@
       "其他": 5
     }
   },
-  "generatedAt": "2026-02-23T13:08:12.196430",
+  "generatedAt": "2026-02-23T13:13:40.900656",
   "source": "generate-standards-catalog.mjs"
 }
