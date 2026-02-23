@@ -105,7 +105,25 @@
       ],
       "date": "2026-02-23",
       "source": "NotebookLM"
+    },
+    {
+      "id": "pfas-964690",
+      "title": "有机氟化合物（PFAS）职业健康防护指南信息图",
+      "description": "NotebookLM自动生成的PFAS职业健康防护信息图，涵盖PFOS/PFOA致癌性分级、全氟异丁烯急性毒性、职业暴露限值、生物监测指标及综合防护措施",
+      "filename": "pfas-964670.png",
+      "tags": [
+        "有机氟",
+        "PFAS",
+        "PFOS",
+        "PFOA",
+        "全氟异丁烯",
+        "职业健康",
+        "信息图",
+        "NotebookLM"
+      ],
+      "date": "2026-02-23",
+      "source": "NotebookLM"
     }
   ],
-  "updatedAt": "2026-02-23T09:09:35.949Z"
+  "updatedAt": "2026-02-23T10:02:44.690Z"
 }
